@@ -5,7 +5,7 @@ import {
   Input,
   InputLabel,
 } from '@material-ui/core';
-import { BaseFormControlType } from '../../validator/types';
+import { BaseFormControlType } from '../../../validator/types';
 import styled from 'styled-components';
 
 interface BaseFormControlProps extends BaseFormControlType {

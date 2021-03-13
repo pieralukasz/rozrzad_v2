@@ -3,9 +3,9 @@ import {
   intakeFirstFormSchema,
   intakeSecondFormSchema,
 } from '../../../../validator/valve/intake/schema';
-import BaseFormControl from '../../../Base/BaseFormControl';
 import { IntakeFormProps } from '../../types';
 import { BaseFormControlType } from '../../../../validator/types';
+import BaseForm from '../../../Base/Form/BaseForm';
 
 const IntakeForm: React.FC<IntakeFormProps> = ({ register }) => {
   const formSchema: BaseFormControlType[] = [
@@ -13,26 +13,7 @@ const IntakeForm: React.FC<IntakeFormProps> = ({ register }) => {
     ...intakeSecondFormSchema,
   ];
 
-  return (
-    <>
-      {formSchema.map((formControl, count) => {
-        return (
-          <BaseFormControl
-            key={count}
-            count={count}
-            reference={register({
-              required:
-                formControl.required !== undefined
-                  ? formControl.required
-                  : false,
-              min: 0,
-            })}
-            {...formControl}
-          />
-        );
-      })}
-    </>
-  );
+  return <BaseForm register={register} formSchema={formSchema} />;
 };
 
 export default IntakeForm;

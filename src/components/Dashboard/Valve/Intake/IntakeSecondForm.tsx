@@ -1,30 +1,10 @@
 import React from 'react';
 import { intakeSecondFormSchema } from '../../../../validator/valve/intake/schema';
-import BaseFormControl from '../../../Base/BaseFormControl';
 import { IntakeFormProps } from '../../types';
-import { BaseFormControlType } from '../../../../validator/types';
+import BaseForm from '../../../Base/Form/BaseForm';
 
 const IntakeSecondForm: React.FC<IntakeFormProps> = ({ register }) => {
-  return (
-    <>
-      {intakeSecondFormSchema.map((formControl, count) => {
-        return (
-          <BaseFormControl
-            key={count}
-            count={count}
-            reference={register({
-              required:
-                formControl.required !== undefined
-                  ? formControl.required
-                  : false,
-              min: 0,
-            })}
-            {...formControl}
-          />
-        );
-      })}
-    </>
-  );
+  return <BaseForm register={register} formSchema={intakeSecondFormSchema} />;
 };
 
 export default IntakeSecondForm;

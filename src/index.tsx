@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import styled from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import store from './store/store';
@@ -13,12 +12,6 @@ const theme = createMuiTheme({
     primary: {
       main: '#fff',
     },
-    secondary: {
-      main: '#fff',
-    },
-    background: {
-      default: '#fff',
-    },
     text: {
       primary: '#fff',
     },
@@ -27,13 +20,13 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
         <Router>
           <App />
         </Router>
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

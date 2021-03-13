@@ -6,7 +6,7 @@ export type IntakeFirstFormSchemaValue = {
   predkoscObrotowaSilnika: string;
   sredniaPredkoscPrzeplywu: string;
   maksymalneNadcisnienieWCylindrze: string;
-  liczbaZaworowNaCylinder: string;
+  liczbaZaworowNaCylinder?: string;
   katPochyleniaPrzylgniZaworowej: string;
 };
 

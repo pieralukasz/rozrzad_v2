@@ -14,9 +14,9 @@ const BaseStepperTop: React.FC<BaseStepperTopProps> = ({
   return (
     <StepperContainer activeStep={activeStep} alternativeLabel>
       {steps.map(label => (
-        <Step key={label}>
+        <StepContainer key={label}>
           <StepLabelContainer>{label}</StepLabelContainer>
-        </Step>
+        </StepContainer>
       ))}
     </StepperContainer>
   );
@@ -27,8 +27,16 @@ const StepperContainer = styled(Stepper)`
   padding-bottom: 0 !important;
 `;
 
+const StepContainer = styled(Step)`
+  font-weight: bold !important;
+`;
+
 const StepLabelContainer = styled(StepLabel)`
   font-weight: bold;
+
+  .MuiStepLabel-label {
+    font-weight: bold !important;
+  }
 `;
 
 export default BaseStepperTop;

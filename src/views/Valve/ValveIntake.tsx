@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseHeader from '../../components/Base/BaseHeader';
-import { AppBar, Button, Step, StepLabel, Stepper } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import IntakeFirstForm from '../../components/Dashboard/Valve/Intake/IntakeFirstForm';
-import { IntakeFormSchemaType } from '../../validator/valve/intake/types';
+import {
+  IntakeFirstFormSchemaValue,
+  IntakeFormSchemaType,
+  IntakeSecondFormSchemaValue,
+} from '../../validator/valve/intake/types';
 import IntakeSecondForm from '../../components/Dashboard/Valve/Intake/IntakeSecondForm';
 import IntakeForm from '../../components/Dashboard/Valve/Intake/IntakeForm';
 import BaseStepperTop from '../../components/Base/BaseStepperTop';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import {
+  setFirstForm,
+  setSecondForm,
+} from '../../features/valveIntakeForm/valveIntakeFormSlice';
 
 const ValveIntake: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
+
+  const valveIntakeForm = useAppSelector(state => state.valveIntakeForm);
+  const dispatch = useAppDispatch();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
@@ -24,17 +36,32 @@ const ValveIntake: React.FC = () => {
     setActiveStep(0);
   };
 
-  const steps = ['Wstępne dane', 'Dodatkowe dane', 'Podsumowanie wyników'];
+  useEffect(() => {
+    console.log(valveIntakeForm);
+  }, [valveIntakeForm]);
+
+  const steps = ['Wstępne dane', 'Obliczenia wstępne', 'Podsumowanie wyników'];
 
   const { handleSubmit, register } = useForm();
   const onSubmit = (intakeValues: IntakeFormSchemaType) => {
-    // TODO validate and calculate all
-    console.log(intakeValues);
-    handleNext();
+    switch (activeStep) {
+      case 0:
+        // TODO validate and calculate all
+        dispatch(setFirstForm(intakeValues as IntakeFirstFormSchemaValue));
+        handleNext();
+        break;
+      case 1:
+        // TODO validate and calculate all
+        dispatch(setSecondForm(intakeValues as IntakeSecondFormSchemaValue));
+        handleNext();
+        break;
+      default:
+        console.log('nothing');
+        break;
+    }
   };
 
   const getStepContent = (stepIndex: number) => {
-    console.log(stepIndex);
     switch (stepIndex) {
       case 0:
         return <IntakeFirstForm register={register} />;
@@ -53,18 +80,14 @@ const ValveIntake: React.FC = () => {
       <BaseStepperTop activeStep={activeStep} steps={steps} />
       <ButtonContainer>
         {activeStep > 0 ? (
-          <Button color="secondary" variant="outlined" onClick={handleBack}>
+          <Button variant="outlined" onClick={handleBack}>
             Cofnij
           </Button>
         ) : (
           ''
         )}
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={handleSubmit(onSubmit)}
-        >
-          Zaakceptuj
+        <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+          Potwierdź
         </Button>
       </ButtonContainer>
       <FormView onSubmit={handleSubmit(onSubmit)}>
