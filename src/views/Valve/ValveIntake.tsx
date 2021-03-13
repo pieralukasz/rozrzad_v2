@@ -22,11 +22,15 @@ import {
   intakeSecondFormSchema,
 } from '../../validator/valve/intake/schema';
 import { BaseFormControlType } from '../../validator/types';
+import IntakeResults from '../../components/Dashboard/Valve/Intake/IntakeResults';
+import { calculateSrednicaKanalu } from '../../components/Dashboard/Valve/Intake/calculations';
+import { initialState } from '../../slices/valveIntakeForm/initialState';
 
 const ValveIntake: React.FC = () => {
   const steps = ['Wstępne dane', 'Obliczenia wstępne', 'Podsumowanie wyników'];
 
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [srednicaKanalu, setSrednicaKanalu] = useState<string>('0');
 
   const valveIntakeForm = useAppSelector(state => state.valveIntakeForm);
   const dispatch = useAppDispatch();
@@ -37,8 +41,6 @@ const ValveIntake: React.FC = () => {
 
   const handleBack = () => {
     if (activeStep === 1) {
-      // clear second form becouse values changed
-      console.log('znika druga');
       dispatch(clearSecondForm());
     }
     setActiveStep((prevActiveStep: number) => prevActiveStep - 1);
@@ -48,13 +50,30 @@ const ValveIntake: React.FC = () => {
   const onSubmit = (intakeValues: IntakeFormSchemaType) => {
     switch (activeStep) {
       case 0:
-        // TODO validate and calculate second Form
+        // TODO validate
+
+        const initialSecondForm = JSON.parse(
+          JSON.stringify(initialState.secondForm)
+        );
+
+        const sK = calculateSrednicaKanalu(
+          intakeValues as IntakeFirstFormSchemaValue
+        ) as string;
+
+        initialSecondForm.srednicaKanalu = `${sK}`;
+        setSrednicaKanalu(sK);
+
+        // chceck srednica trzonu zaworu
+
+        dispatch(setSecondForm(initialSecondForm));
         dispatch(setFirstForm(intakeValues as IntakeFirstFormSchemaValue));
         break;
       case 1:
         // TODO validate and calculate all
-        console.log(intakeValues);
-        dispatch(setSecondForm(intakeValues as IntakeSecondFormSchemaValue));
+        const results = intakeValues as IntakeSecondFormSchemaValue;
+        results.srednicaKanalu = srednicaKanalu;
+
+        dispatch(setSecondForm(results as IntakeSecondFormSchemaValue));
         break;
       default:
         console.log('nothing');
@@ -65,26 +84,16 @@ const ValveIntake: React.FC = () => {
   };
 
   const getStepContent = (stepIndex: number) => {
+    let returnSchema = [];
     switch (stepIndex) {
       case 0:
-        const returnSchema = checkIfStateExist(
-          stepIndex,
-          intakeFirstFormSchema
-        );
-        return (
-          <BaseForm formSchema={intakeFirstFormSchema} register={register} />
-        );
+        returnSchema = checkIfStateExist(stepIndex, intakeFirstFormSchema);
+        return <BaseForm formSchema={returnSchema} register={register} />;
       case 1:
-        return (
-          <BaseForm formSchema={intakeSecondFormSchema} register={register} />
-        );
+        returnSchema = checkIfStateExist(stepIndex, intakeSecondFormSchema);
+        return <BaseForm formSchema={returnSchema} register={register} />;
       case 2:
-        return (
-          <BaseForm
-            formSchema={[...intakeFirstFormSchema, ...intakeSecondFormSchema]}
-            register={register}
-          />
-        );
+        return <IntakeResults />;
       default:
         return <div>Unknown</div>;
     }
@@ -108,11 +117,13 @@ const ValveIntake: React.FC = () => {
     defaultSchema: BaseFormControlType[],
     stateValue: object
   ): BaseFormControlType[] => {
+    const newSchema = defaultSchema;
+
     for (let i = 0; i <= defaultSchema.length - 1; i++) {
       // @ts-ignore
-      defaultSchema[i].value = stateValue[defaultSchema[i].name] as string;
+      newSchema[i].value = stateValue[defaultSchema[i].name] as string;
     }
-    return defaultSchema;
+    return newSchema;
   };
 
   return (

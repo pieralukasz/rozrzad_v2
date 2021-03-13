@@ -13,19 +13,19 @@ export const valveIntakeFormSlice = createSlice({
       state,
       action: PayloadAction<IntakeFirstFormSchemaValue>
     ) => {
-      state.firstForm = action.payload;
+      state.firstForm = action.payload as IntakeFirstFormSchemaValue;
     },
     clearFirstForm: state => {
-      state.firstForm = initialState.firstForm;
+      state.firstForm = initialState.firstForm as IntakeFirstFormSchemaValue;
     },
     setSecondForm: (
       state,
       action: PayloadAction<IntakeSecondFormSchemaValue>
     ) => {
-      state.secondForm = action.payload;
+      state.secondForm = action.payload as IntakeSecondFormSchemaValue;
     },
     clearSecondForm: state => {
-      state.secondForm = initialState.secondForm;
+      state.secondForm = initialState.secondForm as IntakeSecondFormSchemaValue;
     },
   },
 });

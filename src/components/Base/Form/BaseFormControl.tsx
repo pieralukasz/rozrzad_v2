@@ -20,6 +20,7 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
   reference,
   name,
   value,
+  disabled,
 }) => {
   return (
     <FormControlView>
@@ -38,6 +39,7 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
         }}
         key={`${name}-${count}`}
         defaultValue={value !== undefined ? value : undefined}
+        disabled={disabled !== undefined ? disabled : false}
       />
       <FormHelperText>{formHelperText}</FormHelperText>
     </FormControlView>

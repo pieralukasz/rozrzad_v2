@@ -4,4 +4,5 @@ export interface BaseFormControlType {
   name: string;
   required?: boolean;
   value?: string;
+  disabled?: boolean;
 }
