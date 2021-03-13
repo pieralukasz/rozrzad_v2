@@ -3,4 +3,5 @@ export interface BaseFormControlType {
   formHelperText: string;
   name: string;
   required?: boolean;
+  value?: string;
 }

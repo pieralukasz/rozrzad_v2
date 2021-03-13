@@ -26,6 +26,13 @@ export const intakeFirstFormSchema: BaseFormControlType[] = [
     required: true,
   },
   {
+    inputLabel: 'Średnica trzonku zaworu',
+    formHelperText: 'd [mm]',
+    name: 'srednicaTrzonkuZaworu',
+    required: true,
+    value: '10',
+  },
+  {
     inputLabel: 'Maksymalne nadciśnienie w cylindrze',
     formHelperText: 'pmax [MPa]',
     name: 'maksymalneNadcisnienieWCylindrze',
@@ -35,13 +42,13 @@ export const intakeFirstFormSchema: BaseFormControlType[] = [
     inputLabel: 'Liczba zaworów na cylinder',
     formHelperText: 'n [-]',
     name: 'liczbaZaworowNaCylinder',
-    required: true,
+    required: false,
   },
   {
     inputLabel: 'Kąt pochylenia przylgni zaworowej',
     formHelperText: 'alfa [deg]',
     name: 'katPochyleniaPrzylgniZaworowej',
-    required: false,
+    required: true,
   },
 ];
 
@@ -50,11 +57,6 @@ export const intakeSecondFormSchema: BaseFormControlType[] = [
     inputLabel: 'Średnica kanału',
     formHelperText: 'Dk [mm]',
     name: 'srednicaKanalu',
-  },
-  {
-    inputLabel: 'Średnica trzonku zaworu',
-    formHelperText: 'd [mm]',
-    name: 'srednicaTrzonkuZaworu',
   },
   {
     inputLabel: 'Średnica wewnętrzna przylgni',

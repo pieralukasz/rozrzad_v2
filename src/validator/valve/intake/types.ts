@@ -1,10 +1,9 @@
-import IntakeSecondForm from '../../../components/Dashboard/Valve/Intake/IntakeSecondForm';
-
 export type IntakeFirstFormSchemaValue = {
   srednicaTloka: string;
   skokTloka: string;
   predkoscObrotowaSilnika: string;
   sredniaPredkoscPrzeplywu: string;
+  srednicaTrzonkuZaworu: string;
   maksymalneNadcisnienieWCylindrze: string;
   liczbaZaworowNaCylinder?: string;
   katPochyleniaPrzylgniZaworowej: string;
@@ -12,7 +11,6 @@ export type IntakeFirstFormSchemaValue = {
 
 export type IntakeSecondFormSchemaValue = {
   srednicaKanalu: string;
-  srednicaTrzonkuZaworu: string;
   srednicaWewnetrznaPrzylgni: string;
   srednicaZewnetrznaPrzylgni: string;
   srednicaWewnetrznaGrzybkaZaworu: string;

@@ -3,23 +3,30 @@ import BaseHeader from '../../components/Base/BaseHeader';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import IntakeFirstForm from '../../components/Dashboard/Valve/Intake/IntakeFirstForm';
 import {
   IntakeFirstFormSchemaValue,
   IntakeFormSchemaType,
   IntakeSecondFormSchemaValue,
 } from '../../validator/valve/intake/types';
-import IntakeSecondForm from '../../components/Dashboard/Valve/Intake/IntakeSecondForm';
-import IntakeForm from '../../components/Dashboard/Valve/Intake/IntakeForm';
 import BaseStepperTop from '../../components/Base/BaseStepperTop';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   setFirstForm,
   setSecondForm,
-} from '../../features/valveIntakeForm/valveIntakeFormSlice';
+  clearFirstForm,
+  clearSecondForm,
+} from '../../slices/valveIntakeForm/valveIntakeFormSlice';
+import BaseForm from '../../components/Base/Form/BaseForm';
+import {
+  intakeFirstFormSchema,
+  intakeSecondFormSchema,
+} from '../../validator/valve/intake/schema';
+import { BaseFormControlType } from '../../validator/types';
 
 const ValveIntake: React.FC = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const steps = ['Wstępne dane', 'Obliczenia wstępne', 'Podsumowanie wyników'];
+
+  const [activeStep, setActiveStep] = useState<number>(0);
 
   const valveIntakeForm = useAppSelector(state => state.valveIntakeForm);
   const dispatch = useAppDispatch();
@@ -29,49 +36,83 @@ const ValveIntake: React.FC = () => {
   };
 
   const handleBack = () => {
+    if (activeStep === 1) {
+      // clear second form becouse values changed
+      console.log('znika druga');
+      dispatch(clearSecondForm());
+    }
     setActiveStep((prevActiveStep: number) => prevActiveStep - 1);
   };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
-  useEffect(() => {
-    console.log(valveIntakeForm);
-  }, [valveIntakeForm]);
-
-  const steps = ['Wstępne dane', 'Obliczenia wstępne', 'Podsumowanie wyników'];
 
   const { handleSubmit, register } = useForm();
   const onSubmit = (intakeValues: IntakeFormSchemaType) => {
     switch (activeStep) {
       case 0:
-        // TODO validate and calculate all
+        // TODO validate and calculate second Form
         dispatch(setFirstForm(intakeValues as IntakeFirstFormSchemaValue));
-        handleNext();
         break;
       case 1:
         // TODO validate and calculate all
+        console.log(intakeValues);
         dispatch(setSecondForm(intakeValues as IntakeSecondFormSchemaValue));
-        handleNext();
         break;
       default:
         console.log('nothing');
         break;
     }
+
+    handleNext();
   };
 
   const getStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return <IntakeFirstForm register={register} />;
+        const returnSchema = checkIfStateExist(
+          stepIndex,
+          intakeFirstFormSchema
+        );
+        return (
+          <BaseForm formSchema={intakeFirstFormSchema} register={register} />
+        );
       case 1:
-        return <IntakeSecondForm register={register} />;
+        return (
+          <BaseForm formSchema={intakeSecondFormSchema} register={register} />
+        );
       case 2:
-        return <IntakeForm register={register} />;
+        return (
+          <BaseForm
+            formSchema={[...intakeFirstFormSchema, ...intakeSecondFormSchema]}
+            register={register}
+          />
+        );
       default:
-        return 'Unknown';
+        return <div>Unknown</div>;
     }
+  };
+
+  const checkIfStateExist = (
+    numberForm: number,
+    defaultSchema: BaseFormControlType[]
+  ): BaseFormControlType[] => {
+    switch (numberForm) {
+      case 0:
+        return setNewValue(defaultSchema, valveIntakeForm.firstForm);
+      case 1:
+        return setNewValue(defaultSchema, valveIntakeForm.secondForm);
+      default:
+        return defaultSchema;
+    }
+  };
+
+  const setNewValue = (
+    defaultSchema: BaseFormControlType[],
+    stateValue: object
+  ): BaseFormControlType[] => {
+    for (let i = 0; i <= defaultSchema.length - 1; i++) {
+      // @ts-ignore
+      defaultSchema[i].value = stateValue[defaultSchema[i].name] as string;
+    }
+    return defaultSchema;
   };
 
   return (

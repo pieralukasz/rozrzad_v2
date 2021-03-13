@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../store/store';
 import {
   IntakeFirstFormSchemaValue,
   IntakeSecondFormSchemaValue,
@@ -16,20 +15,26 @@ export const valveIntakeFormSlice = createSlice({
     ) => {
       state.firstForm = action.payload;
     },
+    clearFirstForm: state => {
+      state.firstForm = initialState.firstForm;
+    },
     setSecondForm: (
       state,
       action: PayloadAction<IntakeSecondFormSchemaValue>
     ) => {
       state.secondForm = action.payload;
     },
+    clearSecondForm: state => {
+      state.secondForm = initialState.secondForm;
+    },
   },
 });
 
-export const { setFirstForm, setSecondForm } = valveIntakeFormSlice.actions;
-
-export const selectFirstForm = (state: RootState) =>
-  state.valveIntakeForm.firstForm;
-export const selectSecondForm = (state: RootState) =>
-  state.valveIntakeForm.secondForm;
+export const {
+  setFirstForm,
+  setSecondForm,
+  clearFirstForm,
+  clearSecondForm,
+} = valveIntakeFormSlice.actions;
 
 export default valveIntakeFormSlice.reducer;

@@ -6,7 +6,6 @@ import {
 export interface valveIntakePropsState {
   firstForm: IntakeFirstFormSchemaValue;
   secondForm: IntakeSecondFormSchemaValue;
-  calculatedValue: object;
 }
 
 export const initialState: valveIntakePropsState = {
@@ -16,12 +15,12 @@ export const initialState: valveIntakePropsState = {
     predkoscObrotowaSilnika: '',
     sredniaPredkoscPrzeplywu: '',
     maksymalneNadcisnienieWCylindrze: '',
+    srednicaTrzonkuZaworu: '10',
     liczbaZaworowNaCylinder: '',
     katPochyleniaPrzylgniZaworowej: '',
   },
   secondForm: {
     srednicaKanalu: '',
-    srednicaTrzonkuZaworu: '',
     srednicaWewnetrznaPrzylgni: '',
     srednicaZewnetrznaPrzylgni: '',
     srednicaWewnetrznaGrzybkaZaworu: '',
@@ -30,8 +29,5 @@ export const initialState: valveIntakePropsState = {
     wzniosZaworu: '',
     naprezeniaWGrzybkuZaworu: '',
     szerokoscPrzylgniZaworowej: '',
-  },
-  calculatedValue: {
-    srednicaKanalu: '',
   },
 };
