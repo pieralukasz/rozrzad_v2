@@ -1,13 +1,21 @@
 import React from 'react';
-import { intakeSecondFormSchema } from '../../../../validator/valve/intake/schema';
+import {
+  intakeFirstFormSchema,
+  intakeSecondFormSchema,
+} from '../../../../validator/valve/intake/schema';
 import BaseFormControl from '../../../Base/BaseFormControl';
 import { IntakeFormProps } from '../../types';
 import { BaseFormControlType } from '../../../../validator/types';
 
-const IntakeSecondForm: React.FC<IntakeFormProps> = ({ register }) => {
+const IntakeForm: React.FC<IntakeFormProps> = ({ register }) => {
+  const formSchema: BaseFormControlType[] = [
+    ...intakeFirstFormSchema,
+    ...intakeSecondFormSchema,
+  ];
+
   return (
     <>
-      {intakeSecondFormSchema.map((formControl, count) => {
+      {formSchema.map((formControl, count) => {
         return (
           <BaseFormControl
             key={count}
@@ -27,4 +35,4 @@ const IntakeSecondForm: React.FC<IntakeFormProps> = ({ register }) => {
   );
 };
 
-export default IntakeSecondForm;
+export default IntakeForm;

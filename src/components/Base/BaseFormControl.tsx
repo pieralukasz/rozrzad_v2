@@ -43,8 +43,8 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
 };
 
 const FormControlView = styled(FormControl)`
-  margin-top: 0.5rem;
   min-width: 340px !important;
+  margin: 0.25rem !important;
 
   .MuiOutlinedInput-notchedOutline {
     border-color: white;
@@ -57,7 +57,8 @@ const FormControlView = styled(FormControl)`
     color: white;
   }
   .MuiInputBase-input {
-    color: white;
+    color: #ddfc74; // Mindaro
+    font-weight: bold;
   }
 `;
 
