@@ -19,6 +19,7 @@ import { initialState } from '../../../slices/valveForm/initialState';
 import {
   calculateNaprezeniaWGrzybkuZaworu,
   calculateSrednicaKanalu,
+  calculateSzerokoscPrzylgniZaworowej,
 } from './calculations';
 import {
   valveFirstFormSchema,
@@ -29,7 +30,14 @@ import BaseForm from '../../Base/Form/BaseForm';
 import ValveResults from './ValveResults';
 import { BaseFormControlType } from '../../../validator/types';
 
-const ValveContainer: React.FC = ({ children }) => {
+type ValueContainerProps = {
+  whichOne: string;
+};
+
+const ValveContainer: React.FC<ValueContainerProps> = ({
+  children,
+  whichOne,
+}) => {
   const steps = ['Wstępne dane', 'Obliczenia wstępne', 'Podsumowanie wyników'];
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -80,8 +88,17 @@ const ValveContainer: React.FC = ({ children }) => {
 
         thirdForm.naprezeniaWGrzybkuZaworu = `${
           Math.round(
-            parseFloat(calculateNaprezeniaWGrzybkuZaworu(firstForm, results)) *
-              10
+            parseFloat(
+              calculateNaprezeniaWGrzybkuZaworu(firstForm, results, whichOne)
+            ) * 10
+          ) / 10
+        }`;
+
+        thirdForm.szerokoscPrzylgniZaworowej = `${
+          Math.round(
+            parseFloat(
+              calculateSzerokoscPrzylgniZaworowej(firstForm, results)
+            ) * 10
           ) / 10
         }`;
 

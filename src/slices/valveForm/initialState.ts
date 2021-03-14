@@ -19,7 +19,7 @@ export const initialState: valvePropsState = {
     maksymalneNadcisnienieWCylindrze: '',
     srednicaTrzonkaZaworu: '10',
     liczbaZaworowNaCylinder: '',
-    katPochyleniaPrzylgniZaworowej: '90',
+    katPochyleniaPrzylgniZaworowej: '45',
   },
   secondForm: {
     srednicaKanalu: '',

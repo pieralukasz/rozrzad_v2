@@ -7,4 +7,7 @@ export interface BaseFormControlType {
   disabled?: boolean;
   additionalHelperItem?: string;
   autoFocus?: boolean;
+  step?: number;
+  min?: number;
+  max?: number;
 }

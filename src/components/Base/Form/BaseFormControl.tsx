@@ -27,6 +27,9 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
   disabled,
   additionalHelperItem,
   autoFocus,
+  step,
+  min,
+  max,
 }) => {
   const valveIntakeForm = useAppSelector(state => state.valveIntakeForm);
   const dispatch = useAppDispatch();
@@ -59,7 +62,9 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
         autoFocus={autoFocus !== undefined ? autoFocus : count === 0}
         inputRef={reference}
         inputProps={{
-          min: 0,
+          min: min !== undefined ? min : 0,
+          max: max !== undefined ? max : Infinity,
+          step: step !== undefined ? step : 1,
         }}
         key={`${name}-${count}`}
         defaultValue={value !== undefined ? value : undefined}
@@ -87,21 +92,24 @@ const FormControlView = styled(FormControl)`
   .MuiOutlinedInput-notchedOutline {
     border-color: white;
   }
+
   .MuiFormLabel-root {
     color: white;
     font-weight: bold;
   }
+
   .MuiFormHelperText-root {
     color: white;
   }
+
   .MuiInputBase-input {
-    color: #ddfc74; // Mindaro
+    color: #fff59b; // Mindaro
     font-weight: bold;
   }
 `;
 
 const AdditionalFormHelperText = styled(FormHelperText)`
-  color: #1e3af3 !important;
+  color: rgba(0, 0, 0, 0.54) !important;
   font-weight: bold !important;
 `;
 

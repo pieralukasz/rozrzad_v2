@@ -37,7 +37,8 @@ export const calculateSrednicaKanalu = (
 
 export const calculateNaprezeniaWGrzybkuZaworu = (
   firstFormSchema: ValveFirstFormSchemaValue,
-  secondFormSchema: ValveSecondFormSchemaValue
+  secondFormSchema: ValveSecondFormSchemaValue,
+  whichOne: string
 ): string => {
   const { maksymalneNadcisnienieWCylindrze } = firstFormSchema;
 
@@ -60,4 +61,27 @@ export const calculateNaprezeniaWGrzybkuZaworu = (
     Math.pow(r / ogg, 2) * parseFloat(maksymalneNadcisnienieWCylindrze);
 
   return sigma.toString();
+};
+
+export const calculateSzerokoscPrzylgniZaworowej = (
+  firstFormSchema: ValveFirstFormSchemaValue,
+  secondFormSchema: ValveSecondFormSchemaValue
+) => {
+  const { katPochyleniaPrzylgniZaworowej } = firstFormSchema;
+
+  const {
+    srednicaWewnetrznaPrzylgni,
+    srednicaZewnetrznaPrzylgni,
+  } = secondFormSchema;
+
+  console.log(katPochyleniaPrzylgniZaworowej);
+
+  console.log(Math.sin(parseInt(katPochyleniaPrzylgniZaworowej)));
+
+  const s =
+    (parseFloat(srednicaZewnetrznaPrzylgni) -
+      parseFloat(srednicaWewnetrznaPrzylgni)) /
+    Math.sin(0.86);
+
+  return s.toString();
 };

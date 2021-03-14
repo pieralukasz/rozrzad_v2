@@ -49,7 +49,11 @@ export const valveFirstFormSchema: BaseFormControlType[] = [
     formHelperText: 'alfa [deg]',
     name: 'katPochyleniaPrzylgniZaworowej',
     required: true,
-    value: '90',
+    value: '45',
+    step: 15,
+    min: 45,
+    max: 60,
+    additionalHelperItem: 'Wartość zalecana: 45 lub 60 stopni',
   },
 ];
 
