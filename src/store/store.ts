@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import valveIntakeFormSlice from '../slices/valveIntakeForm/valveIntakeFormSlice';
+import valveIntakeFormSlice from '../slices/valveForm/valveFormSlice';
 
 const store = configureStore({
   reducer: {

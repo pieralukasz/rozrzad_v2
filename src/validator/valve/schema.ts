@@ -1,6 +1,6 @@
-import { BaseFormControlType } from '../../types';
+import { BaseFormControlType } from '../types';
 
-export const intakeFirstFormSchema: BaseFormControlType[] = [
+export const valveFirstFormSchema: BaseFormControlType[] = [
   {
     inputLabel: 'Średnica Tłoka',
     formHelperText: 'D [mm]',
@@ -27,7 +27,7 @@ export const intakeFirstFormSchema: BaseFormControlType[] = [
   },
   {
     inputLabel: 'Średnica trzonka zaworu',
-    formHelperText: 'd [mm], jeżeli chcesz obliczyć podaj 0',
+    formHelperText: 'd [mm]',
     name: 'srednicaTrzonkaZaworu',
     required: true,
     value: '10',
@@ -49,10 +49,11 @@ export const intakeFirstFormSchema: BaseFormControlType[] = [
     formHelperText: 'alfa [deg]',
     name: 'katPochyleniaPrzylgniZaworowej',
     required: true,
+    value: '90',
   },
 ];
 
-export const intakeSecondFormSchema: BaseFormControlType[] = [
+export const valveSecondFormSchema: BaseFormControlType[] = [
   {
     inputLabel: 'Średnica kanału',
     formHelperText: 'Dk [mm]',
@@ -65,6 +66,7 @@ export const intakeSecondFormSchema: BaseFormControlType[] = [
     formHelperText: 'Dwp [mm]',
     name: 'srednicaWewnetrznaPrzylgni',
     required: true,
+    autoFocus: true,
   },
   {
     inputLabel: 'Średnica zewnętrzna przylgni',
@@ -90,6 +92,9 @@ export const intakeSecondFormSchema: BaseFormControlType[] = [
     name: 'gruboscGrzybkaZaworu',
     required: true,
   },
+];
+
+export const valveThirdFormSchema: BaseFormControlType[] = [
   {
     inputLabel: 'Wznios zaworu',
     formHelperText: 'Hz [mm]',

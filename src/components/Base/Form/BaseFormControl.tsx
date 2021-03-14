@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { ChangeEvent, ChangeEventHandler, useState } from 'react';
 import {
+  Button,
   FormControl,
   FormHelperText,
   Input,
@@ -7,6 +8,9 @@ import {
 } from '@material-ui/core';
 import { BaseFormControlType } from '../../../validator/types';
 import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { ValveSecondFormSchemaValue } from '../../../validator/valve/types';
+import { setSecondForm } from '../../../slices/valveForm/valveFormSlice';
 
 interface BaseFormControlProps extends BaseFormControlType {
   count: number;
@@ -21,7 +25,27 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
   name,
   value,
   disabled,
+  additionalHelperItem,
+  autoFocus,
 }) => {
+  const valveIntakeForm = useAppSelector(state => state.valveIntakeForm);
+  const dispatch = useAppDispatch();
+
+  const passValue = (value: string) => {
+    const valveSecondForm = JSON.parse(
+      JSON.stringify(valveIntakeForm.secondForm)
+    ) as ValveSecondFormSchemaValue;
+
+    // @ts-ignore
+    valveSecondForm[name] = value;
+
+    dispatch(setSecondForm(valveSecondForm));
+  };
+
+  const setInputValue = (e: any) => {
+    passValue(e.target.value);
+  };
+
   return (
     <FormControlView>
       <InputLabel htmlFor={inputLabel}>
@@ -32,7 +56,7 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
         id={inputLabel}
         name={name}
         type="number"
-        autoFocus={count !== undefined ? count === 0 : false}
+        autoFocus={autoFocus !== undefined ? autoFocus : count === 0}
         inputRef={reference}
         inputProps={{
           min: 0,
@@ -40,8 +64,18 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
         key={`${name}-${count}`}
         defaultValue={value !== undefined ? value : undefined}
         disabled={disabled !== undefined ? disabled : false}
+        onChange={setInputValue}
       />
       <FormHelperText>{formHelperText}</FormHelperText>
+      {additionalHelperItem !== undefined ? (
+        <>
+          <AdditionalFormHelperText>
+            {additionalHelperItem}
+          </AdditionalFormHelperText>
+        </>
+      ) : (
+        ''
+      )}
     </FormControlView>
   );
 };
@@ -64,6 +98,15 @@ const FormControlView = styled(FormControl)`
     color: #ddfc74; // Mindaro
     font-weight: bold;
   }
+`;
+
+const AdditionalFormHelperText = styled(FormHelperText)`
+  color: #1e3af3 !important;
+  font-weight: bold !important;
+`;
+
+const AdditionalButton = styled(Button)`
+  color: #1e3af3 !important;
 `;
 
 export default BaseFormControl;

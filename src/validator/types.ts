@@ -5,4 +5,6 @@ export interface BaseFormControlType {
   required?: boolean;
   value?: string;
   disabled?: boolean;
+  additionalHelperItem?: string;
+  autoFocus?: boolean;
 }

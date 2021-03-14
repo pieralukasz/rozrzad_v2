@@ -1,23 +1,25 @@
 import {
-  IntakeFirstFormSchemaValue,
-  IntakeSecondFormSchemaValue,
-} from '../../validator/valve/intake/types';
+  ValveFirstFormSchemaValue,
+  ValveSecondFormSchemaValue,
+  ValveThirdFormSchemaValue,
+} from '../../validator/valve/types';
 
-export interface valveIntakePropsState {
-  firstForm: IntakeFirstFormSchemaValue;
-  secondForm: IntakeSecondFormSchemaValue;
+export interface valvePropsState {
+  firstForm: ValveFirstFormSchemaValue;
+  secondForm: ValveSecondFormSchemaValue;
+  thirdForm: ValveThirdFormSchemaValue;
 }
 
-export const initialState: valveIntakePropsState = {
+export const initialState: valvePropsState = {
   firstForm: {
     srednicaTloka: '',
     skokTloka: '',
     predkoscObrotowaSilnika: '',
     sredniaPredkoscPrzeplywu: '',
     maksymalneNadcisnienieWCylindrze: '',
-    srednicaTrzonkuZaworu: '10',
+    srednicaTrzonkaZaworu: '10',
     liczbaZaworowNaCylinder: '',
-    katPochyleniaPrzylgniZaworowej: '',
+    katPochyleniaPrzylgniZaworowej: '90',
   },
   secondForm: {
     srednicaKanalu: '',
@@ -26,6 +28,8 @@ export const initialState: valveIntakePropsState = {
     srednicaWewnetrznaGrzybkaZaworu: '',
     srednicaZewnetrznaGrzybkaZaworu: '',
     gruboscGrzybkaZaworu: '',
+  },
+  thirdForm: {
     wzniosZaworu: '',
     naprezeniaWGrzybkuZaworu: '',
     szerokoscPrzylgniZaworowej: '',
