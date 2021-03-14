@@ -209,6 +209,10 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
     return newSchema;
   };
 
+  const saveFile = () => {
+    console.log('zapisuje plik');
+  };
+
   const updateNewValue = (name: string) => {};
 
   return (
@@ -219,6 +223,13 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
         {activeStep > 0 ? (
           <Button variant="outlined" onClick={handleBack}>
             Cofnij
+          </Button>
+        ) : (
+          ''
+        )}
+        {activeStep > 0 ? (
+          <Button variant="outlined" onClick={() => saveFile()}>
+            Pobierz dane
           </Button>
         ) : (
           ''
@@ -254,7 +265,8 @@ const ButtonContainer = styled.div`
   margin-top: 1rem;
   margin-bottom: 1rem;
 
-  button:nth-child(2) {
+  button:nth-child(2),
+  button:nth-child(3) {
     margin-left: 2rem;
   }
 `;

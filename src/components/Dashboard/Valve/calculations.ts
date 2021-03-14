@@ -52,13 +52,14 @@ export const calculateNaprezeniaWGrzybkuZaworu = (
   const r =
     (parseFloat(srednicaWewnetrznaPrzylgni) +
       parseFloat(srednicaZewnetrznaPrzylgni)) /
-    2;
+    4;
 
   // obliczeniowa grubosc grzybka
   const ogg = 1.3 * parseFloat(gruboscGrzybkaZaworu);
 
-  const sigma =
-    Math.pow(r / ogg, 2) * parseFloat(maksymalneNadcisnienieWCylindrze);
+  const cal = r / ogg;
+
+  const sigma = Math.pow(cal, 2) * parseFloat(maksymalneNadcisnienieWCylindrze);
 
   return sigma.toString();
 };
@@ -74,14 +75,13 @@ export const calculateSzerokoscPrzylgniZaworowej = (
     srednicaZewnetrznaPrzylgni,
   } = secondFormSchema;
 
-  console.log(katPochyleniaPrzylgniZaworowej);
-
-  console.log(Math.sin(parseInt(katPochyleniaPrzylgniZaworowej)));
+  console.log();
 
   const s =
     (parseFloat(srednicaZewnetrznaPrzylgni) -
       parseFloat(srednicaWewnetrznaPrzylgni)) /
-    Math.sin(0.86);
+    (2 *
+      Math.sin((parseFloat(katPochyleniaPrzylgniZaworowej) * Math.PI) / 180));
 
   return s.toString();
 };

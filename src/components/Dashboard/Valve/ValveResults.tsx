@@ -64,9 +64,20 @@ const ValveResults: React.FC<ValveResultsProps> = ({ results }) => {
         </TableHead>
         <TableBody>
           {rows.map((row: any) => (
-            <TableRow>
+            <TableRow key={row.name}>
               <TableCellBody component="th" scope="row">
                 {row.name}
+                {row.name === 'Szerokość przylgni zaworowej [Sp]' ? (
+                  parseFloat(row.value) < 0.8 || parseFloat(row.value) > 2 ? (
+                    <TableWrongData>
+                      Wartość musi być zgodna z PN-62/S-36506 (0.8 - 2){' '}
+                    </TableWrongData>
+                  ) : (
+                    ''
+                  )
+                ) : (
+                  ''
+                )}
               </TableCellBody>
               <TableCellBody align="center">
                 {row.value ? row.value : '---'}
@@ -81,7 +92,7 @@ const ValveResults: React.FC<ValveResultsProps> = ({ results }) => {
 };
 
 const TableContainerStyle = styled(Paper)`
-  width: 50% !important;
+  width: 60% !important;
   background-color: #626654 !important;
   color: black !important;
 `;
@@ -95,6 +106,10 @@ const TableCellHeader = styled(TableCell)`
 const TableCellBody = styled(TableCell)`
   font-weight: bold !important;
   padding: 6px 8px !important;
+`;
+
+const TableWrongData = styled.div`
+  color: #e27272 !important;
 `;
 
 export default ValveResults;
