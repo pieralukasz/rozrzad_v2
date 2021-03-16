@@ -5,6 +5,7 @@ import { Switch, Link, useLocation, useHistory } from 'react-router-dom';
 import routes from './routes';
 import GenerateRouter from './routes/Router';
 import { Button } from '@material-ui/core';
+import { saveJSONFileIntoFolder } from './utils/downloadFile';
 
 const App: React.FC = () => {
   let location = useLocation();
@@ -22,7 +23,15 @@ const App: React.FC = () => {
   return (
     <AppView>
       {location.pathname !== '/' && location.pathname !== '/index.html' ? (
-        <BackButton variant="contained" onClick={() => handleBack()}>
+        <BackButton
+          variant="contained"
+          onClick={() =>
+            saveJSONFileIntoFolder(
+              'xd',
+              JSON.parse(JSON.stringify({ hello: 'elo' }))
+            )
+          }
+        >
           Powrót
         </BackButton>
       ) : (

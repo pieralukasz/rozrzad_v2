@@ -20,6 +20,7 @@ import {
   calculateNaprezeniaWGrzybkuZaworu,
   calculateSrednicaKanalu,
   calculateSzerokoscPrzylgniZaworowej,
+  calculateWzniosZaworu,
 } from './calculations';
 import {
   valveFirstFormSchema,
@@ -29,6 +30,7 @@ import {
 import BaseForm from '../../Base/Form/BaseForm';
 import ValveResults from './ValveResults';
 import { BaseFormControlType } from '../../../validator/types';
+import { saveJSONFileIntoFolder } from '../../../utils/downloadFile';
 
 type ValueContainerProps = {
   whichOne: string;
@@ -99,6 +101,12 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
             parseFloat(
               calculateSzerokoscPrzylgniZaworowej(firstForm, results)
             ) * 10
+          ) / 10
+        }`;
+
+        thirdForm.wzniosZaworu = `${
+          Math.round(
+            parseFloat(calculateWzniosZaworu(firstForm, results)) * 10
           ) / 10
         }`;
 
@@ -210,10 +218,8 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
   };
 
   const saveFile = () => {
-    console.log('zapisuje plik');
+    saveJSONFileIntoFolder('xd', JSON.parse(JSON.stringify({ hello: 'elo' })));
   };
-
-  const updateNewValue = (name: string) => {};
 
   return (
     <ValveIntakeView>
@@ -227,7 +233,7 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
         ) : (
           ''
         )}
-        {activeStep > 0 ? (
+        {activeStep === 2 ? (
           <Button variant="outlined" onClick={() => saveFile()}>
             Pobierz dane
           </Button>
