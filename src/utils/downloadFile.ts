@@ -4,8 +4,7 @@ const dialog = remote.dialog;
 
 export const saveJSONFileIntoFolder = (
   name: string,
-  content: JSON,
-  where: string
+  content: JSON
 ) => {
   const options = {
     title: 'Save file',
