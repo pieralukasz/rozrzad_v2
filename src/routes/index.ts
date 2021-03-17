@@ -6,6 +6,8 @@ import Cam from '../views/Cam/Cam';
 import Spring from '../views/Spring/Spring';
 import ValveOutlet from '../views/Valve/ValveOutlet';
 import ValveIntake from '../views/Valve/ValveIntake';
+import CamOutlet from '../views/Cam/CamOutlet';
+import CamIntake from '../views/Cam/CamIntake';
 
 export interface Config extends RouteConfig {
   component:
@@ -46,12 +48,25 @@ const ROUTES: Config[] = [
       },
     ],
   },
-
   {
     path: '/cam',
     key: 'CAM',
     exact: false,
     component: Cam,
+    routes: [
+      {
+        path: '/cam/outlet',
+        key: 'OUTLET',
+        exact: false,
+        component: CamOutlet,
+      },
+      {
+        path: '/cam/intake',
+        key: 'INTAKE',
+        exact: false,
+        component: CamIntake,
+      },
+    ],
   },
   {
     path: '/spring',

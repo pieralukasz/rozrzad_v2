@@ -5,7 +5,7 @@ const fs = remote.require('fs');
 const dialog = remote.dialog;
 
 export const selectFile = async () => {
-  return await openDialog();
+  return await openDialog().then(res => JSON.parse(res as string));
 };
 
 async function readFile(path: string) {
@@ -27,7 +27,6 @@ async function openDialog() {
       })
       .then(async (fileNames: any) => {
         if (fileNames === undefined) {
-          console.log('No file selected');
           reject();
         }
         resolve(await readFile(fileNames.filePaths[0]));

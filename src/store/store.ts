@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import valveIntakeFormSlice from '../slices/valveForm/valveFormSlice';
+import camFormSlice from '../slices/camForm/camFormSlice';
 
 const store = configureStore({
   reducer: {
     valveIntakeForm: valveIntakeFormSlice,
+    camForm: camFormSlice,
   },
 });
 

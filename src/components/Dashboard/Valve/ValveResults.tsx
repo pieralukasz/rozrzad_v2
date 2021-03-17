@@ -41,18 +41,6 @@ const ValveResults: React.FC<ValveResultsProps> = ({ results }) => {
   }, []);
 
   return (
-    // <ul>
-    //   {results
-    //     ? results.map(res => {
-    //         return (
-    //           <li key={res.name}>
-    //             {res.inputLabel} {res.formHelperText.split('[')[0]} -{' '}
-    //             {res.value} [{res.formHelperText.split('[')[1]}
-    //           </li>
-    //         );
-    //       })
-    //     : ''}
-    // </ul>
     <TableContainerStyle component={Paper}>
       <Table>
         <TableHead>

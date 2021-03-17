@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseStepperTop from '../../Base/BaseStepperTop';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
@@ -31,6 +31,7 @@ import BaseForm from '../../Base/Form/BaseForm';
 import ValveResults from './ValveResults';
 import { BaseFormControlType } from '../../../validator/types';
 import { saveJSONFileIntoFolder } from '../../../utils/downloadFile';
+import { useHistory } from 'react-router-dom';
 
 type ValueContainerProps = {
   whichOne: string;
@@ -44,6 +45,8 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
 
   const [activeStep, setActiveStep] = useState<number>(0);
   const [srednicaKanalu, setSrednicaKanalu] = useState<string>('0');
+
+  let history = useHistory();
 
   const valveIntakeForm = useAppSelector(state => state.valveIntakeForm);
   const dispatch = useAppDispatch();
@@ -63,8 +66,6 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
   const onSubmit = (intakeValues: ValveFormSchemaType) => {
     switch (activeStep) {
       case 0:
-        // TODO validate
-
         const initialSecondForm = JSON.parse(
           JSON.stringify(initialState.secondForm)
         );
@@ -112,6 +113,9 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
 
         dispatch(setThirdForm(thirdForm));
         dispatch(setSecondForm(results as ValveSecondFormSchemaValue));
+        break;
+      case 2:
+        history.push('/');
         break;
       default:
         console.log('nothing');
@@ -235,7 +239,7 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
   return (
     <ValveIntakeView>
       {children}
-      <BaseStepperTop activeStep={activeStep} steps={steps} />
+      <BaseStepperTop activeStep={activeStep} steps={steps} color="#92967d" />
       <ButtonContainer>
         {activeStep > 0 ? (
           <Button variant="outlined" onClick={handleBack}>
@@ -252,7 +256,7 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
           ''
         )}
         <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-          Potwierdź
+          {activeStep <= 1 ? 'Potwierdź' : 'Zakończ'}
         </Button>
       </ButtonContainer>
       <FormView onSubmit={handleSubmit(onSubmit)}>

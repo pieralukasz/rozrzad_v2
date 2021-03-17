@@ -5,14 +5,16 @@ import styled from 'styled-components';
 interface BaseStepperTopProps {
   steps: string[];
   activeStep: number;
+  color: string;
 }
 
 const BaseStepperTop: React.FC<BaseStepperTopProps> = ({
   steps,
   activeStep,
+  color,
 }) => {
   return (
-    <StepperContainer activeStep={activeStep} alternativeLabel>
+    <StepperContainer activeStep={activeStep} alternativeLabel color={color}>
       {steps.map(label => (
         <StepContainer key={label}>
           <StepLabelContainer>{label}</StepLabelContainer>
@@ -23,7 +25,7 @@ const BaseStepperTop: React.FC<BaseStepperTopProps> = ({
 };
 
 const StepperContainer = styled(Stepper)`
-  background-color: #92967d !important;
+  background-color: ${props => props.color} !important;
   padding-bottom: 0 !important;
 `;
 
