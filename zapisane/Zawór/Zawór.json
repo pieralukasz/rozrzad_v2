@@ -1,0 +1,19 @@
+{
+  "srednicaTloka": 88,
+  "skokTloka": 94,
+  "predkoscObrotowaSilnika": 4300,
+  "sredniaPredkoscPrzeplywu": 50,
+  "srednicaTrzonkaZaworu": 10,
+  "maksymalneNadcisnienieWCylindrze": 6.5,
+  "liczbaZaworowNaCylinder": 2,
+  "katPochyleniaPrzylgniZaworowej": 60,
+  "srednicaKanalu": 34,
+  "srednicaWewnetrznaPrzylgni": 34,
+  "srednicaZewnetrznaPrzylgni": 36,
+  "srednicaWewnetrznaGrzybkaZaworu": 33,
+  "srednicaZewnetrznaGrzybkaZaworu": 37,
+  "gruboscGrzybkaZaworu": 4.5,
+  "wzniosZaworu": 7.3,
+  "naprezeniaWGrzybkuZaworu": 58.2,
+  "szerokoscPrzylgniZaworowej": 1.2
+}

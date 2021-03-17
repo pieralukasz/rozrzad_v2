@@ -218,7 +218,18 @@ const ValveContainer: React.FC<ValueContainerProps> = ({
   };
 
   const saveFile = () => {
-    saveJSONFileIntoFolder('xd', JSON.parse(JSON.stringify({ hello: 'elo' })));
+    let form = {
+      ...valveIntakeForm.firstForm,
+      ...valveIntakeForm.secondForm,
+      ...valveIntakeForm.thirdForm,
+    };
+
+    Object.keys(form).forEach(function (el) {
+      // @ts-ignore
+      form[el] = parseFloat(form[el]);
+    });
+
+    saveJSONFileIntoFolder('Zawór', form);
   };
 
   return (

@@ -6,6 +6,7 @@ import routes from './routes';
 import GenerateRouter from './routes/Router';
 import { Button } from '@material-ui/core';
 import { saveJSONFileIntoFolder } from './utils/downloadFile';
+import { selectFile } from './utils/selectFile';
 
 const App: React.FC = () => {
   let location = useLocation();
@@ -20,18 +21,14 @@ const App: React.FC = () => {
     }
   };
 
+  // const selectFiless = async () => {
+  //   const data = await selectFile();
+  // };
+
   return (
     <AppView>
       {location.pathname !== '/' && location.pathname !== '/index.html' ? (
-        <BackButton
-          variant="contained"
-          onClick={() =>
-            saveJSONFileIntoFolder(
-              'xd',
-              JSON.parse(JSON.stringify({ hello: 'elo' }))
-            )
-          }
-        >
+        <BackButton variant="contained" onClick={() => handleBack()}>
           Powrót
         </BackButton>
       ) : (
