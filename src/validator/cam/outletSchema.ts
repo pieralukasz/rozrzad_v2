@@ -9,7 +9,7 @@ export const camFirstFormSchemaOutlet: BaseFormControlType[] = [
     required: true,
     min: 30,
     max: 70,
-    additionalHelperItem: '30 <= kat_O <= 70',
+    additionalHelperItem: 'Wartość zalecana: 30 <= kat_O <= 70',
   },
   {
     inputLabel: 'Kąt zamknięcia zaworu po DMP',
@@ -18,7 +18,7 @@ export const camFirstFormSchemaOutlet: BaseFormControlType[] = [
     required: true,
     min: 5,
     max: 25,
-    additionalHelperItem: '5 <= kat_Z <= 25',
+    additionalHelperItem: 'Wartość zalecana: 5 <= kat_Z <= 25',
   },
   {
     inputLabel: 'Średnica Cylindra',
@@ -31,7 +31,6 @@ export const camFirstFormSchemaOutlet: BaseFormControlType[] = [
     formHelperText: 'd [mm]',
     name: 'srednicaWaluRozrzadu',
     required: true,
-    additionalHelperItem: 'Wprowadź średnice wału rozrządu d.',
   },
   {
     inputLabel: 'Promień podstawowy krzywki',
@@ -45,12 +44,15 @@ export const camFirstFormSchemaOutlet: BaseFormControlType[] = [
     formHelperText: 'Hz [mm]',
     name: 'skokZaworu',
     required: true,
+    min: 1,
+    max: 1.7,
   },
   {
     inputLabel: 'Przełożenie dźwigienki',
     formHelperText: 'ez / ep = Hz / Hk [-]',
     name: 'przelozenieDzwigienki',
     required: false,
+    additionalHelperItem: 'Wartość zalecana: 1.0 <= Hz/Hk <= 1.7',
   },
   {
     inputLabel: 'Promień łuku wierzchołkowego',

@@ -3,11 +3,6 @@ import BaseStepperTop from '../../Base/BaseStepperTop';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
-import { ValveFormSchemaType } from '../../../validator/valve/types';
-import {
-  valveFirstFormSchema,
-  valveSecondFormSchema,
-} from '../../../validator/valve/schema';
 import BaseForm from '../../Base/Form/BaseForm';
 import {
   camFirstFormSchemaIntake,
@@ -20,8 +15,22 @@ import {
 } from '../../../validator/cam/outletSchema';
 import { BaseFormControlType } from '../../../validator/types';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import {
+  setFirstForm,
+  setSecondForm,
+} from '../../../slices/camForm/camFormSlice';
 import ValveResults from '../Valve/ValveResults';
 import { saveJSONFileIntoFolder } from '../../../utils/downloadFile';
+import {
+  CamFirstFormSchemaValue,
+  CamFormSchemaType,
+  CamSecondFormSchemaValue,
+} from '../../../validator/cam/types';
+import {
+  calculateSecondFormSchema,
+  calculateSkokKrzywki,
+} from './calculations';
+import { initialState } from '../../../slices/camForm/initialState';
 
 type CamContainerProps = {
   whichOne: string;
@@ -53,7 +62,22 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
     setActiveStep((prevActiveStep: number) => prevActiveStep - 1);
   };
 
-  const onSubmit = (intakeValues: ValveFormSchemaType) => {
+  const onSubmit = (intakeValues: CamFormSchemaType) => {
+    switch (activeStep) {
+      case 0:
+        dispatch(setFirstForm(intakeValues as CamFirstFormSchemaValue));
+
+        const secondSchema = calculateSecondFormSchema(
+          intakeValues as CamFirstFormSchemaValue
+        );
+
+        dispatch(setSecondForm(secondSchema));
+        break;
+      case 1:
+        break;
+      default:
+        break;
+    }
     handleNext();
   };
 
@@ -112,6 +136,44 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
     defaultSchema: BaseFormControlType[],
     stateValue: object
   ): BaseFormControlType[] => {
+    const newSchema = defaultSchema;
+
+    for (let i = 0; i <= defaultSchema.length - 1; i++) {
+      // @ts-ignore
+      newSchema[i].value = stateValue[defaultSchema[i].name] as string;
+      // @ts-ignore
+      if (newSchema[i].name === 'srednicaWaluRozrzadu') {
+        const sC = (stateValue as CamFirstFormSchemaValue).srednicaCylindra;
+        newSchema[i].additionalHelperItem =
+          sC.length > 0
+            ? `Wartość zalecana: ${
+                Math.round(parseFloat(sC) * 0.25 * 10) / 10
+              } <= r <= ${Math.round(parseFloat(sC) * 0.3 * 10) / 10}`
+            : 'Wprowadź średnice cylindra D.';
+      } else if (newSchema[i].name === 'promienPodstawowyKrzywki') {
+        const d = (stateValue as CamFirstFormSchemaValue).srednicaWaluRozrzadu;
+        newSchema[i].additionalHelperItem =
+          d.length > 0
+            ? `Wartość zalecana: ${
+                Math.round((parseFloat(d) / 2 + 1.5) * 100) / 100
+              } <= r <= ${Math.round(((parseFloat(d) / 2 + 3) * 100) / 100)}`
+            : 'Wprowadź średnice wału rozrządu d.';
+      } else if (newSchema[i].name === 'promienLukuWierzcholkowego') {
+        const D = (stateValue as CamFirstFormSchemaValue).srednicaCylindra;
+
+        const valueMin =
+          Math.round(
+            (parseFloat(D) * 0.02 < 1.5 ? 1.5 : parseFloat(D) * 0.02) * 10
+          ) / 10;
+        const valueMax = Math.round(parseFloat(D) * 0.08 * 10) / 10;
+
+        newSchema[i].additionalHelperItem =
+          D.length > 0
+            ? `Wartość zalecana: ${valueMin} <= ro <= ${valueMax}`
+            : 'Wprowadź średnice cylindra D.';
+      }
+    }
+
     return defaultSchema;
   };
 

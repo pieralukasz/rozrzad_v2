@@ -11,6 +11,9 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { ValveSecondFormSchemaValue } from '../../../validator/valve/types';
 import { setSecondForm } from '../../../slices/valveForm/valveFormSlice';
+import { setFirstForm } from '../../../slices/camForm/camFormSlice';
+import { CamFirstFormSchemaValue } from '../../../validator/cam/types';
+import { useLocation } from 'react-router-dom';
 
 interface BaseFormControlProps extends BaseFormControlType {
   count: number;
@@ -32,17 +35,36 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
   max,
 }) => {
   const valveIntakeForm = useAppSelector(state => state.valveIntakeForm);
+  const camForm = useAppSelector(state => state.camForm);
   const dispatch = useAppDispatch();
 
+  let location = useLocation();
+
   const passValue = (value: string) => {
-    const valveSecondForm = JSON.parse(
-      JSON.stringify(valveIntakeForm.secondForm)
-    ) as ValveSecondFormSchemaValue;
+    switch (location.pathname.split('/')[1]) {
+      case 'valve':
+        const valveSecondForm = JSON.parse(
+          JSON.stringify(valveIntakeForm.secondForm)
+        ) as ValveSecondFormSchemaValue;
 
-    // @ts-ignore
-    valveSecondForm[name] = value;
+        // @ts-ignore
+        valveSecondForm[name] = value;
 
-    dispatch(setSecondForm(valveSecondForm));
+        dispatch(setSecondForm(valveSecondForm));
+        break;
+      case 'cam':
+        const camFirstForm = JSON.parse(
+          JSON.stringify(camForm.firstForm)
+        ) as CamFirstFormSchemaValue;
+
+        // @ts-ignore
+        camFirstForm[name] = value;
+
+        dispatch(setFirstForm(camFirstForm));
+        break;
+      default:
+        break;
+    }
   };
 
   const setInputValue = (e: any) => {

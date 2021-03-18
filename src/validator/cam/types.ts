@@ -18,3 +18,11 @@ export type CamSecondFormSchemaValue = {
   wspolrzednePunktuGranicznegoF: string;
   wartoscKataDBF: string;
 };
+
+export type CamFormSchemaValue = CamFirstFormSchemaValue &
+  CamSecondFormSchemaValue;
+
+export type CamFormSchemaType =
+  | CamFirstFormSchemaValue
+  | CamSecondFormSchemaValue
+  | CamFormSchemaValue;
