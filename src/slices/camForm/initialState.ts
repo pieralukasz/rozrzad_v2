@@ -1,11 +1,19 @@
 import {
+  CamFifthFormSchemaValue,
   CamFirstFormSchemaValue,
+  CamFourthFormSchemaValue,
   CamSecondFormSchemaValue,
+  CamSixthFormSchemaValue,
+  CamThirdFormSchemaValue,
 } from '../../validator/cam/types';
 
 export interface CamPropsState {
   firstForm: CamFirstFormSchemaValue;
   secondForm: CamSecondFormSchemaValue;
+  thirdForm: CamThirdFormSchemaValue;
+  fourthForm: CamFourthFormSchemaValue;
+  fifthForm: CamFifthFormSchemaValue;
+  sixForm: CamSixthFormSchemaValue;
 }
 
 export const initialState: CamPropsState = {
@@ -27,5 +35,26 @@ export const initialState: CamPropsState = {
     wspolrzedneSrodkaPromieniaLukuR: '',
     wspolrzednePunktuGranicznegoF: '',
     wartoscKataDBF: '',
+  },
+  thirdForm: {
+    predkoscObrotowaSilnika: '',
+    liczbaSuwowSilnika: '',
+  },
+  fourthForm: {
+    najwiekszePrzyspieszenieDodatnie: '',
+    przyspieszenieWPunkcieF: '',
+    przyspieszenieNaWierzcholkuKrzywki: '',
+    ilorazPrzyspieszen: '',
+    wskaznikWypelnieniaPolaWzniosow: '',
+  },
+  fifthForm: {
+    luzZaworu: '',
+    luzKonstrukcyjnyKrzywki: '',
+    katDlaLiniiPrzejściowejDelta: '',
+  },
+  sixForm: {
+    katDlaLiniiPrzejściowejEpsylon: '',
+    promienR1DlaLiniiPrzejsciowej: '',
+    promienR2DlaLiniiPrzejsciowej: '',
   },
 };

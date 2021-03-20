@@ -1,4 +1,6 @@
 import { BaseFormControlType } from '../types';
+import BaseForm from '../../components/Base/Form/BaseForm';
+import BaseFormControl from '../../components/Base/Form/BaseFormControl';
 
 export const camFirstFormSchemaIntake: BaseFormControlType[] = [
   {
@@ -101,6 +103,97 @@ export const camSecondFormSchemaIntake: BaseFormControlType[] = [
     inputLabel: 'Wartość kąta DBF',
     formHelperText: 'beta [deg]',
     name: 'wartoscKataDBF',
+    required: true,
+  },
+];
+
+export const camThirdFormSchemaIntake: BaseFormControlType[] = [
+  {
+    inputLabel: 'Prędkość obrotowa silnika',
+    formHelperText: 'n [obr/min]',
+    name: 'predkoscObrotowaSilnika',
+    required: true,
+  },
+  {
+    inputLabel: 'Liczba suwów silnika',
+    formHelperText: 'tau [-]',
+    name: 'liczbaSuwowSilnika',
+    required: true,
+    additionalHelperItem: '(2 lub 4)',
+  },
+];
+
+export const camFourthFormSchemaIntake: BaseFormControlType[] = [
+  {
+    inputLabel: 'Największe przyspieszenie dodatnie',
+    formHelperText: 'amax [m/s^2]',
+    name: 'najwiekszePrzyspieszenieDodatnie',
+    required: true,
+  },
+  {
+    inputLabel: 'Przyspieszenie w punkcie F',
+    formHelperText: 'amin1 [m/s^2]',
+    name: 'przyspieszenieWPunkcieF',
+    required: true,
+  },
+  {
+    inputLabel: 'Przyspieszenie na wierzchołku krzywki',
+    formHelperText: 'amin [m/s^2]',
+    name: 'przyspieszenieNaWierzcholkuKrzywki',
+    required: true,
+  },
+  {
+    inputLabel: 'Iloraz przyspieszen',
+    formHelperText: 'I amax/amin1 [-]',
+    name: 'ilorazPrzyspieszen',
+    required: true,
+  },
+  {
+    inputLabel: 'Wskaźnik wypełnienia pola wzniosów',
+    formHelperText: 'wyp [-]',
+    name: 'wskaznikWypelnieniaPolaWzniosow',
+    required: true,
+  },
+];
+
+export const camFifthFormSchemaIntake: BaseFormControlType[] = [
+  {
+    inputLabel: 'Luz zaworowy',
+    formHelperText: 'sz [mm]',
+    name: 'luzZaworu',
+    required: true,
+  },
+  {
+    inputLabel: 'Luz konstrukcyjny krzywki',
+    formHelperText: 'sk [mm]',
+    name: 'luzKonstrukcyjnyKrzywki',
+    required: true,
+  },
+  {
+    inputLabel: 'Kąt dla linii przejściowej',
+    formHelperText: 'delta [deg]',
+    name: 'katDlaLiniiPrzejściowejDelta',
+    required: true,
+  },
+];
+
+export const camSixthFormSchemaIntake: BaseFormControlType[] = [
+  {
+    inputLabel: 'Kąt dla linii przejściowej',
+    formHelperText: 'epsylon [deg]',
+    name: 'katDlaLiniiPrzejściowejEpsylon',
+    required: true,
+  },
+  {
+    inputLabel: 'Promień r1 dla linii przejściowej',
+    formHelperText: 'r1 [mm]',
+    name: 'promienR1DlaLiniiPrzejsciowej',
+    required: true,
+  },
+  {
+    inputLabel: 'Promień r2 dla linii przejściowej',
+    formHelperText: 'r2 [mm]',
+    name: 'promienR2DlaLiniiPrzejsciowej',
     required: true,
   },
 ];

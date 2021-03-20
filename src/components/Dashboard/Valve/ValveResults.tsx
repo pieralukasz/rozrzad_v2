@@ -10,12 +10,16 @@ import {
   TableRow,
 } from '@material-ui/core';
 import styled from 'styled-components';
+import { checkIfRIsOk } from '../Cam/calculations';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
 type ValveResultsProps = {
   results: BaseFormControlType[];
 };
 
 const ValveResults: React.FC<ValveResultsProps> = ({ results }) => {
+  const camForm = useAppSelector(state => state.camForm);
+
   function createData(name: string, value: string, unit: string) {
     return { name, value, unit };
   }
@@ -40,6 +44,8 @@ const ValveResults: React.FC<ValveResultsProps> = ({ results }) => {
     setRows(initial);
   }, []);
 
+  const exceptions = () => {};
+
   return (
     <TableContainerStyle component={Paper}>
       <Table>
@@ -59,6 +65,20 @@ const ValveResults: React.FC<ValveResultsProps> = ({ results }) => {
                   parseFloat(row.value) < 0.8 || parseFloat(row.value) > 2 ? (
                     <TableWrongData>
                       Wartość musi być zgodna z PN-62/S-36506 (0.8 - 2){' '}
+                    </TableWrongData>
+                  ) : (
+                    ''
+                  )
+                ) : (
+                  ''
+                )}
+                {row.name === 'Promień łuku bocznego [R]' ? (
+                  checkIfRIsOk(
+                    parseFloat(camForm.secondForm.promienLukuBocznego),
+                    parseFloat(camForm.secondForm.skokKrzywki)
+                  ) ? (
+                    <TableWrongData>
+                      Wartość musi być zgodna z R = (10 - 18)Hk
                     </TableWrongData>
                   ) : (
                     ''

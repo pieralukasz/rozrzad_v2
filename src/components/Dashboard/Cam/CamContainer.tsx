@@ -5,13 +5,21 @@ import { Button } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import BaseForm from '../../Base/Form/BaseForm';
 import {
+  camFifthFormSchemaIntake,
   camFirstFormSchemaIntake,
+  camFourthFormSchemaIntake,
   camSecondFormSchemaIntake,
+  camSixthFormSchemaIntake,
+  camThirdFormSchemaIntake,
 } from '../../../validator/cam/intakeSchema';
 import { INTAKE } from '../../../views/Cam/CamIntake';
 import {
+  camFifthFormSchemaOutlet,
   camFirstFormSchemaOutlet,
+  camFourthFormSchemaOutlet,
   camSecondFormSchemaOutlet,
+  camSixthFormSchemaOutlet,
+  camThirdFormSchemaOutlet,
 } from '../../../validator/cam/outletSchema';
 import { BaseFormControlType } from '../../../validator/types';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -19,9 +27,15 @@ import {
   setFirstForm,
   setSecondForm,
 } from '../../../slices/camForm/camFormSlice';
+import {
+  setFirstForm as setValveFirstForm,
+  setSecondForm as setValveSecondForm,
+  setThirdForm as setValveThirdForm,
+} from '../../../slices/valveForm/valveFormSlice';
 import ValveResults from '../Valve/ValveResults';
 import { saveJSONFileIntoFolder } from '../../../utils/downloadFile';
 import {
+  CamFifthFormSchemaValue,
   CamFirstFormSchemaValue,
   CamFormSchemaType,
   CamSecondFormSchemaValue,
@@ -31,6 +45,7 @@ import {
   calculateSkokKrzywki,
 } from './calculations';
 import { initialState } from '../../../slices/camForm/initialState';
+import { selectFile } from '../../../utils/selectFile';
 
 type CamContainerProps = {
   whichOne: string;
@@ -40,11 +55,11 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
   const steps = [
     'Podstawowe parametry krzywki',
     'Podstawowe parametry krzywki - Obliczenia',
-    'Część bierna krzywki1',
-    'Część bierna krzywki2',
-    'Część bierna krzywki3',
-    'Część bierna krzywki4',
+    'Kinematyka krzywki',
+    'Kinematyka krzywki - Obliczenia',
     'Część bierna krzywki',
+    'Część bierna krzywki - Obliczenia',
+    'Część bierna krzywkixx',
   ];
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -73,7 +88,8 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
 
         dispatch(setSecondForm(secondSchema));
         break;
-      case 1:
+      case 2:
+        // TODO calculate all
         break;
       default:
         break;
@@ -104,15 +120,106 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
         }
       case 1:
         if (whichOne === INTAKE) {
-          const firstSchema = checkIfStateExist(0, camFirstFormSchemaIntake);
-          const secondSchema = checkIfStateExist(1, camSecondFormSchemaIntake);
+          const firstSchema = checkIfStateExist(
+            stepIndex - 1,
+            camFirstFormSchemaIntake
+          );
+          const secondSchema = checkIfStateExist(
+            stepIndex,
+            camSecondFormSchemaIntake
+          );
           return <ValveResults results={[...firstSchema, ...secondSchema]} />;
         } else {
-          const firstSchema = checkIfStateExist(0, camFirstFormSchemaOutlet);
-          const secondSchema = checkIfStateExist(1, camSecondFormSchemaOutlet);
+          const firstSchema = checkIfStateExist(
+            stepIndex - 1,
+            camFirstFormSchemaOutlet
+          );
+          const secondSchema = checkIfStateExist(
+            stepIndex,
+            camSecondFormSchemaOutlet
+          );
           return <ValveResults results={[...firstSchema, ...secondSchema]} />;
         }
-
+      case 2:
+        if (whichOne === INTAKE) {
+          returnSchema = checkIfStateExist(stepIndex, camThirdFormSchemaIntake);
+          return (
+            <BaseForm
+              formSchema={camThirdFormSchemaIntake}
+              register={register}
+            />
+          );
+        } else {
+          returnSchema = checkIfStateExist(stepIndex, camThirdFormSchemaOutlet);
+          return (
+            <BaseForm
+              formSchema={camThirdFormSchemaOutlet}
+              register={register}
+            />
+          );
+        }
+      case 3:
+        if (whichOne === INTAKE) {
+          const thirdSchema = checkIfStateExist(
+            stepIndex - 1,
+            camThirdFormSchemaIntake
+          );
+          const fourthSchema = checkIfStateExist(
+            stepIndex,
+            camFourthFormSchemaIntake
+          );
+          return <ValveResults results={[...thirdSchema, ...fourthSchema]} />;
+        } else {
+          const thirdSchema = checkIfStateExist(
+            stepIndex - 1,
+            camThirdFormSchemaOutlet
+          );
+          const fourthSchema = checkIfStateExist(
+            stepIndex,
+            camFourthFormSchemaOutlet
+          );
+          return <ValveResults results={[...thirdSchema, ...fourthSchema]} />;
+        }
+      case 4:
+        if (whichOne === INTAKE) {
+          returnSchema = checkIfStateExist(stepIndex, camFifthFormSchemaIntake);
+          return (
+            <BaseForm
+              formSchema={camFifthFormSchemaIntake}
+              register={register}
+            />
+          );
+        } else {
+          returnSchema = checkIfStateExist(stepIndex, camFifthFormSchemaOutlet);
+          return (
+            <BaseForm
+              formSchema={camFifthFormSchemaOutlet}
+              register={register}
+            />
+          );
+        }
+      case 5:
+        if (whichOne === INTAKE) {
+          const fifthForm = checkIfStateExist(
+            stepIndex - 1,
+            camFifthFormSchemaIntake
+          );
+          const sixthForm = checkIfStateExist(
+            stepIndex,
+            camSixthFormSchemaIntake
+          );
+          return <ValveResults results={[...fifthForm, ...sixthForm]} />;
+        } else {
+          const fifthForm = checkIfStateExist(
+            stepIndex - 1,
+            camFifthFormSchemaOutlet
+          );
+          const sixthForm = checkIfStateExist(
+            stepIndex,
+            camSixthFormSchemaOutlet
+          );
+          return <ValveResults results={[...fifthForm, ...sixthForm]} />;
+        }
       default:
         return <div>Unknown</div>;
     }
@@ -127,6 +234,14 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
         return setNewValue(defaultSchema, camForm.firstForm);
       case 1:
         return setNewValue(defaultSchema, camForm.secondForm);
+      case 2:
+        return setNewValue(defaultSchema, camForm.thirdForm);
+      case 3:
+        return setNewValue(defaultSchema, camForm.fourthForm);
+      case 4:
+        return setNewValue(defaultSchema, camForm.fifthForm);
+      case 5:
+        return setNewValue(defaultSchema, camForm.sixForm);
       default:
         return defaultSchema;
     }
@@ -171,6 +286,36 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
           D.length > 0
             ? `Wartość zalecana: ${valueMin} <= ro <= ${valueMax}`
             : 'Wprowadź średnice cylindra D.';
+      } else if (newSchema[i].name === 'luzZaworu') {
+        console.log(stateValue);
+        const D = camForm.firstForm.srednicaCylindra;
+
+        const valueMin = Math.round(0.0015 * parseFloat(D) * 10) / 10 + 0.1;
+        const valueMax = Math.round(0.004 * parseFloat(D) * 10) / 10 + 0.1;
+
+        newSchema[
+          i
+        ].additionalHelperItem = `Wartość zalecana: ${valueMin} <= sz <= ${valueMax}`;
+      } else if (newSchema[i].name === 'luzKonstrukcyjnyKrzywki') {
+        console.log(camForm.firstForm.przelozenieDzwigienki);
+
+        const i =
+          1 / parseFloat(camForm.firstForm.przelozenieDzwigienki as string);
+
+        console.log(i);
+
+        const sz = (stateValue as CamFifthFormSchemaValue).luzZaworu;
+
+        console.log(sz);
+
+        const sp = i * parseFloat(sz);
+
+        const valueMin = 1.2 * sp;
+        const valueMax = 1.5 * sp;
+
+        // newSchema[
+        //   i
+        // ].additionalHelperItem = `Wartość zalecana: ${valueMin} <= sz <= ${valueMax}`;
       }
     }
 
@@ -193,10 +338,27 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
 
     Object.keys(form).forEach(function (el) {
       // @ts-ignore
-      form[el] = parseFloat(form[el]);
+      if (
+        el === 'wspolrzednePunktuGranicznegoE' ||
+        el === 'wspolrzedneSrodkaPromieniaLukuR' ||
+        el === 'wspolrzednePunktuGranicznegoF'
+      ) {
+        console.log('');
+      } else {
+        // @ts-ignore
+        form[el] = parseFloat(form[el]);
+      }
     });
 
     saveJSONFileIntoFolder('Krzywka', form);
+  };
+
+  const importFile = async () => {
+    const data = await selectFile();
+
+    dispatch(setValveFirstForm(data));
+    dispatch(setValveSecondForm(data));
+    dispatch(setValveThirdForm(data));
   };
 
   return (
@@ -211,7 +373,14 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
         ) : (
           ''
         )}
-        {activeStep === 1 ? (
+        {/*{activeStep === 0 ? (*/}
+        {/*  <Button variant="outlined" onClick={importFile}>*/}
+        {/*    Zaimportuj dane zaworu*/}
+        {/*  </Button>*/}
+        {/*) : (*/}
+        {/*  ''*/}
+        {/*)}*/}
+        {activeStep % 2 === 1 ? (
           <Button variant="outlined" onClick={() => saveFile()}>
             Pobierz dane
           </Button>
