@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialState } from './initialState';
 import {
+  CamEighthFormSchemaValue,
   CamFifthFormSchemaValue,
   CamFirstFormSchemaValue,
   CamFourthFormSchemaValue,
   CamSecondFormSchemaValue,
+  CamSeventhFormSchemaValue,
   CamSixthFormSchemaValue,
   CamThirdFormSchemaValue,
 } from '../../validator/cam/types';
@@ -49,6 +51,21 @@ export const camFormSlice = createSlice({
     clearSixthForm: state => {
       state.sixForm = initialState.sixForm as CamSixthFormSchemaValue;
     },
+    setSeventhForm: (
+      state,
+      action: PayloadAction<CamSeventhFormSchemaValue>
+    ) => {
+      state.sevenForm = action.payload as CamSeventhFormSchemaValue;
+    },
+    clearSeventhForm: state => {
+      state.sevenForm = initialState.sevenForm as CamSeventhFormSchemaValue;
+    },
+    setEighthForm: (state, action: PayloadAction<CamEighthFormSchemaValue>) => {
+      state.eightForm = action.payload as CamEighthFormSchemaValue;
+    },
+    clearEighthForm: state => {
+      state.eightForm = initialState.eightForm as CamEighthFormSchemaValue;
+    },
   },
 });
 
@@ -65,6 +82,10 @@ export const {
   clearFifthForm,
   setSixthForm,
   clearSixthForm,
+  setSeventhForm,
+  clearSeventhForm,
+  setEighthForm,
+  clearEighthForm,
 } = camFormSlice.actions;
 
 export default camFormSlice.reducer;

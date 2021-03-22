@@ -5,19 +5,23 @@ import { Button } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import BaseForm from '../../Base/Form/BaseForm';
 import {
+  camEighthFormSchemaIntake,
   camFifthFormSchemaIntake,
   camFirstFormSchemaIntake,
   camFourthFormSchemaIntake,
   camSecondFormSchemaIntake,
+  camSeventhFormSchemaIntake,
   camSixthFormSchemaIntake,
   camThirdFormSchemaIntake,
 } from '../../../validator/cam/intakeSchema';
 import { INTAKE } from '../../../views/Cam/CamIntake';
 import {
+  camEighthFormSchemaOutlet,
   camFifthFormSchemaOutlet,
   camFirstFormSchemaOutlet,
   camFourthFormSchemaOutlet,
   camSecondFormSchemaOutlet,
+  camSeventhFormSchemaOutlet,
   camSixthFormSchemaOutlet,
   camThirdFormSchemaOutlet,
 } from '../../../validator/cam/outletSchema';
@@ -26,6 +30,12 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
   setFirstForm,
   setSecondForm,
+  setThirdForm,
+  setFourthForm,
+  setFifthForm,
+  setSixthForm,
+  setSeventhForm,
+  setEighthForm,
 } from '../../../slices/camForm/camFormSlice';
 import {
   setFirstForm as setValveFirstForm,
@@ -39,13 +49,19 @@ import {
   CamFirstFormSchemaValue,
   CamFormSchemaType,
   CamSecondFormSchemaValue,
+  CamSeventhFormSchemaValue,
+  CamThirdFormSchemaValue,
 } from '../../../validator/cam/types';
 import {
+  calculateEighthFormSchema,
+  calculateFourthFormSchema,
   calculateSecondFormSchema,
+  calculateSixthFormSchema,
   calculateSkokKrzywki,
 } from './calculations';
 import { initialState } from '../../../slices/camForm/initialState';
 import { selectFile } from '../../../utils/selectFile';
+import { useHistory } from 'react-router-dom';
 
 type CamContainerProps = {
   whichOne: string;
@@ -59,12 +75,16 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
     'Kinematyka krzywki - Obliczenia',
     'Część bierna krzywki',
     'Część bierna krzywki - Obliczenia',
-    'Część bierna krzywkixx',
+    'Współpraca z płaskim popychaczem',
+    'Współpraca z płaskim popychaczem - Obliczenia',
+    'Wyniki',
   ];
 
   const [activeStep, setActiveStep] = useState<number>(0);
 
   const { handleSubmit, register } = useForm();
+
+  let history = useHistory();
 
   const camForm = useAppSelector(state => state.camForm);
   const dispatch = useAppDispatch();
@@ -89,15 +109,49 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
         dispatch(setSecondForm(secondSchema));
         break;
       case 2:
-        // TODO calculate all
+        dispatch(setThirdForm(intakeValues as CamThirdFormSchemaValue));
+        const firstForm = camForm.firstForm;
+
+        const fourthSchema = calculateFourthFormSchema(
+          firstForm,
+          calculateSecondFormSchema(firstForm),
+          intakeValues as CamThirdFormSchemaValue
+        );
+
+        dispatch(setFourthForm(fourthSchema));
+        break;
+      case 4:
+        dispatch(setFifthForm(intakeValues as CamFifthFormSchemaValue));
+
+        const sixthSchema = calculateSixthFormSchema(
+          camForm.firstForm,
+          calculateSecondFormSchema(camForm.firstForm),
+          camForm.thirdForm,
+          camForm.fourthForm,
+          intakeValues as CamFifthFormSchemaValue
+        );
+
+        dispatch(setSixthForm(sixthSchema));
+        break;
+
+      case 6:
+        dispatch(setSeventhForm(intakeValues as CamSeventhFormSchemaValue));
+
+        const eighthSchema = calculateEighthFormSchema();
+        dispatch(setEighthForm(eighthSchema));
         break;
       default:
         break;
     }
-    handleNext();
+    if (activeStep !== 8) {
+      handleNext();
+    } else {
+      history.push('/');
+    }
   };
 
   const getStepContent = (stepIndex: number) => {
+    console.log(stepIndex);
     let returnSchema = [];
     switch (stepIndex) {
       case 0:
@@ -220,6 +274,85 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
           );
           return <ValveResults results={[...fifthForm, ...sixthForm]} />;
         }
+      case 6:
+        if (whichOne === INTAKE) {
+          returnSchema = checkIfStateExist(
+            stepIndex,
+            camSeventhFormSchemaIntake
+          );
+          return (
+            <BaseForm
+              formSchema={camSeventhFormSchemaIntake}
+              register={register}
+            />
+          );
+        } else {
+          returnSchema = checkIfStateExist(
+            stepIndex,
+            camSeventhFormSchemaOutlet
+          );
+          return (
+            <BaseForm
+              formSchema={camSeventhFormSchemaOutlet}
+              register={register}
+            />
+          );
+        }
+      case 7:
+        if (whichOne === INTAKE) {
+          const seventhForm = checkIfStateExist(
+            stepIndex - 1,
+            camSeventhFormSchemaIntake
+          );
+          const eighthForm = checkIfStateExist(
+            stepIndex,
+            camEighthFormSchemaIntake
+          );
+          return <ValveResults results={[...seventhForm, ...eighthForm]} />;
+        } else {
+          const seventhForm = checkIfStateExist(
+            stepIndex - 1,
+            camSeventhFormSchemaOutlet
+          );
+          const eighthForm = checkIfStateExist(
+            stepIndex,
+            camEighthFormSchemaOutlet
+          );
+          return <ValveResults results={[...seventhForm, ...eighthForm]} />;
+        }
+      case 8:
+        console.log('elooo');
+        if (whichOne === INTAKE) {
+          return (
+            <ValveResults
+              results={[
+                ...camFirstFormSchemaIntake,
+                ...camSecondFormSchemaIntake,
+                ...camThirdFormSchemaIntake,
+                ...camFourthFormSchemaIntake,
+                ...camFifthFormSchemaIntake,
+                ...camSixthFormSchemaIntake,
+                ...camSeventhFormSchemaIntake,
+                ...camEighthFormSchemaIntake,
+              ]}
+            />
+          );
+        } else {
+          return (
+            <ValveResults
+              results={[
+                ...camFirstFormSchemaOutlet,
+                ...camSecondFormSchemaOutlet,
+                ...camThirdFormSchemaOutlet,
+                ...camFourthFormSchemaOutlet,
+                ...camFifthFormSchemaOutlet,
+                ...camSixthFormSchemaOutlet,
+                ...camSeventhFormSchemaOutlet,
+                ...camEighthFormSchemaOutlet,
+              ]}
+            />
+          );
+        }
       default:
         return <div>Unknown</div>;
     }
@@ -242,6 +375,10 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
         return setNewValue(defaultSchema, camForm.fifthForm);
       case 5:
         return setNewValue(defaultSchema, camForm.sixForm);
+      case 6:
+        return setNewValue(defaultSchema, camForm.sevenForm);
+      case 7:
+        return setNewValue(defaultSchema, camForm.eightForm);
       default:
         return defaultSchema;
     }
@@ -287,7 +424,6 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
             ? `Wartość zalecana: ${valueMin} <= ro <= ${valueMax}`
             : 'Wprowadź średnice cylindra D.';
       } else if (newSchema[i].name === 'luzZaworu') {
-        console.log(stateValue);
         const D = camForm.firstForm.srednicaCylindra;
 
         const valueMin = Math.round(0.0015 * parseFloat(D) * 10) / 10 + 0.1;
@@ -297,25 +433,25 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
           i
         ].additionalHelperItem = `Wartość zalecana: ${valueMin} <= sz <= ${valueMax}`;
       } else if (newSchema[i].name === 'luzKonstrukcyjnyKrzywki') {
-        console.log(camForm.firstForm.przelozenieDzwigienki);
-
-        const i =
+        const ix =
           1 / parseFloat(camForm.firstForm.przelozenieDzwigienki as string);
-
-        console.log(i);
 
         const sz = (stateValue as CamFifthFormSchemaValue).luzZaworu;
 
-        console.log(sz);
-
-        const sp = i * parseFloat(sz);
+        const sp = ix * parseFloat(sz);
 
         const valueMin = 1.2 * sp;
         const valueMax = 1.5 * sp;
 
-        // newSchema[
-        //   i
-        // ].additionalHelperItem = `Wartość zalecana: ${valueMin} <= sz <= ${valueMax}`;
+        newSchema[i].additionalHelperItem =
+          sz.length > 0
+            ? `Wartość zalecana: ${Math.round(valueMin * 10) / 10} <= sz <= ${
+                Math.round(valueMax * 10) / 10
+              }`
+            : 'Wprowadź wartośc luzu zaworu';
+      } else if (newSchema[i].name === 'srednicaPopychacza') {
+        const r = parseFloat(camForm.firstForm.promienPodstawowyKrzywki);
+        const R = parseFloat(camForm.secondForm.promienLukuBocznego);
       }
     }
 
@@ -330,6 +466,36 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
         form = {
           ...camForm.firstForm,
           ...camForm.secondForm,
+        };
+        break;
+      case 3:
+        form = {
+          ...camForm.thirdForm,
+          ...camForm.fourthForm,
+        };
+        break;
+      case 5:
+        form = {
+          ...camForm.fifthForm,
+          ...camForm.sixForm,
+        };
+        break;
+      case 7:
+        form = {
+          ...camForm.sevenForm,
+          ...camForm.eightForm,
+        };
+        break;
+      case 8:
+        form = {
+          ...camForm.firstForm,
+          ...camForm.secondForm,
+          ...camForm.thirdForm,
+          ...camForm.fourthForm,
+          ...camForm.fifthForm,
+          ...camForm.sixForm,
+          ...camForm.sevenForm,
+          ...camForm.eightForm,
         };
         break;
       default:
@@ -353,14 +519,6 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
     saveJSONFileIntoFolder('Krzywka', form);
   };
 
-  const importFile = async () => {
-    const data = await selectFile();
-
-    dispatch(setValveFirstForm(data));
-    dispatch(setValveSecondForm(data));
-    dispatch(setValveThirdForm(data));
-  };
-
   return (
     <CamIntakeView>
       {children}
@@ -373,14 +531,7 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
         ) : (
           ''
         )}
-        {/*{activeStep === 0 ? (*/}
-        {/*  <Button variant="outlined" onClick={importFile}>*/}
-        {/*    Zaimportuj dane zaworu*/}
-        {/*  </Button>*/}
-        {/*) : (*/}
-        {/*  ''*/}
-        {/*)}*/}
-        {activeStep % 2 === 1 ? (
+        {activeStep % 2 === 1 || activeStep === 8 ? (
           <Button variant="outlined" onClick={() => saveFile()}>
             Pobierz dane
           </Button>
@@ -388,10 +539,10 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
           ''
         )}
         <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-          Potwierdź
+          {activeStep <= 7 ? 'Potwierdź' : 'Zakończ'}
         </Button>
       </ButtonContainer>
-      <FormView onSubmit={handleSubmit(onSubmit)}>
+      <FormView onSubmit={handleSubmit(onSubmit)} key={activeStep}>
         {getStepContent(activeStep)}
       </FormView>
     </CamIntakeView>

@@ -1,8 +1,10 @@
 import { BaseFormControlType } from '../types';
 import {
+  camEighthFormSchemaIntake,
   camFifthFormSchemaIntake,
   camFourthFormSchemaIntake,
   camSecondFormSchemaIntake,
+  camSeventhFormSchemaIntake,
   camSixthFormSchemaIntake,
   camThirdFormSchemaIntake,
 } from './intakeSchema';
@@ -77,3 +79,7 @@ export const camFourthFormSchemaOutlet = camFourthFormSchemaIntake;
 export const camFifthFormSchemaOutlet = camFifthFormSchemaIntake;
 
 export const camSixthFormSchemaOutlet = camSixthFormSchemaIntake;
+
+export const camSeventhFormSchemaOutlet = camSeventhFormSchemaIntake;
+
+export const camEighthFormSchemaOutlet = camEighthFormSchemaIntake;

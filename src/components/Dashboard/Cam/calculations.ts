@@ -1,6 +1,11 @@
 import {
+  CamEighthFormSchemaValue,
+  CamFifthFormSchemaValue,
   CamFirstFormSchemaValue,
+  CamFourthFormSchemaValue,
   CamSecondFormSchemaValue,
+  CamSixthFormSchemaValue,
+  CamThirdFormSchemaValue,
 } from '../../../validator/cam/types';
 import { initialState } from '../../../slices/camForm/initialState';
 
@@ -72,6 +77,59 @@ export const checkIfRIsOk = (R: number, Hk: number) => {
   return R <= 10 * Hk || R >= 18 * Hk;
 };
 
+export const calculatePrzyspieszenieMaxE = (
+  omegar: number,
+  R: number,
+  r: number
+): number => {
+  return Math.round(Math.pow(omegar, 2) * (R - r) * 0.001 * 1000) / 1000;
+};
+
+export const calculatePrzyspieszenieMinF = (
+  omegar: number,
+  beta: number,
+  A: number
+): number => {
+  return (
+    Math.round(
+      -Math.pow(omegar, 2) * A * Math.sin((beta * Math.PI) / 180) * 0.001 * 1000
+    ) / 1000
+  );
+};
+
+export const calculatePrzyspieszenieMinW = (
+  omegar: number,
+  A: number
+): number => {
+  return Math.round(-1 * Math.pow(omegar, 2) * A * 0.001 * 1000) / 1000;
+};
+
+export const calculateEpsylon = (delta: number, alpha: number): number => {
+  const initial = (alpha - delta) / 2;
+
+  return initial + delta;
+};
+
+export const calculater1r2 = (
+  which: number,
+  ad: number,
+  ed: number,
+  ae: number,
+  r: number,
+  sk: number
+): number => {
+  const denominator = ae + ed - ad;
+
+  switch (which) {
+    case 1:
+      return Math.round((r + (sk * (ad - ed)) / denominator) * 1000) / 1000;
+    case 2:
+      return Math.round((r - (sk * ed) / denominator) * 1000) / 1000;
+    default:
+      return 0;
+  }
+};
+
 export const calculateSecondFormSchema = (
   firstFormSchema: CamFirstFormSchemaValue
 ): CamSecondFormSchemaValue => {
@@ -80,7 +138,7 @@ export const calculateSecondFormSchema = (
   ) as CamSecondFormSchemaValue;
 
   const skokKrzywki = calculateSkokKrzywki(
-    firstFormSchema.przelozenieDzwigienki as string,
+    firstFormSchema.przelozenieDzwigienki,
     firstFormSchema.skokZaworu
   );
 
@@ -138,4 +196,124 @@ export const calculateSecondFormSchema = (
   initalSecondForm.wartoscKataDBF = DBF.toString();
 
   return initalSecondForm;
+};
+
+export const calculateFourthFormSchema = (
+  firstForm: CamFirstFormSchemaValue,
+  secondForm: CamSecondFormSchemaValue,
+  thirdForm: CamThirdFormSchemaValue
+): CamFourthFormSchemaValue => {
+  const initialFourthForm = JSON.parse(
+    JSON.stringify(initialState.fourthForm)
+  ) as CamFourthFormSchemaValue;
+
+  const n = parseFloat(thirdForm.predkoscObrotowaSilnika);
+  const tau = parseFloat(thirdForm.liczbaSuwowSilnika);
+  const R = parseFloat(secondForm.promienLukuBocznego);
+  const r = parseFloat(firstForm.promienPodstawowyKrzywki);
+  const beta = parseFloat(secondForm.wartoscKataDBF);
+  const A = parseFloat(secondForm.polozenieSrodkaLukuWierzcholkowego);
+
+  const omega = (2 * Math.PI * n) / 60;
+
+  // sprawdzenie suwów dla 4 w/2, a dla 2 w
+  const omegar = tau === 4 ? omega / 2 : omega;
+
+  initialFourthForm.najwiekszePrzyspieszenieDodatnie = calculatePrzyspieszenieMaxE(
+    omegar,
+    R,
+    r
+  ).toString();
+
+  initialFourthForm.przyspieszenieWPunkcieF = calculatePrzyspieszenieMinF(
+    omegar,
+    beta,
+    A
+  ).toString();
+
+  initialFourthForm.przyspieszenieNaWierzcholkuKrzywki = calculatePrzyspieszenieMinW(
+    omegar,
+    A
+  ).toString();
+
+  console.log(
+    parseFloat(initialFourthForm.najwiekszePrzyspieszenieDodatnie),
+    parseFloat(initialFourthForm.przyspieszenieWPunkcieF)
+  );
+
+  initialFourthForm.ilorazPrzyspieszen = Math.abs(
+    Math.round(
+      (parseFloat(initialFourthForm.najwiekszePrzyspieszenieDodatnie) /
+        parseFloat(initialFourthForm.przyspieszenieNaWierzcholkuKrzywki)) *
+        1000
+    ) / 1000
+  ).toString();
+
+  // TODO obliczyc pole wzniosu zaworu
+
+  console.log(initialFourthForm);
+
+  return initialFourthForm;
+};
+
+export const calculateSixthFormSchema = (
+  firstForm: CamFirstFormSchemaValue,
+  secondForm: CamSecondFormSchemaValue,
+  thirdForm: CamThirdFormSchemaValue,
+  fourthForm: CamFourthFormSchemaValue,
+  fifthForm: CamFifthFormSchemaValue
+): CamSixthFormSchemaValue => {
+  const initialSixthForm = JSON.parse(
+    JSON.stringify(initialState.sixForm)
+  ) as CamSixthFormSchemaValue;
+
+  const alpha = calculateAlpha(
+    firstForm.promienPodstawowyKrzywki,
+    firstForm.promienLukuWierzcholkowego,
+    secondForm.polozenieSrodkaLukuWierzcholkowego,
+    firstForm.katOtwarciaZaworuPrzedDMP,
+    firstForm.katZamknieciaZaworuPoDMP
+  );
+
+  const r = parseFloat(firstForm.promienPodstawowyKrzywki);
+
+  const sk = parseFloat(fifthForm.luzKonstrukcyjnyKrzywki);
+
+  const delta = parseFloat(fifthForm.katDlaLiniiPrzejsciowejDelta);
+
+  const epsylon = calculateEpsylon(delta, alpha.alpha);
+
+  initialSixthForm.katDlaLiniiPrzejsciowejEpsylon = epsylon.toString();
+
+  const ad = Math.sin(((alpha.alpha - delta) * Math.PI) / 180);
+  const ed = Math.sin(((epsylon - delta) * Math.PI) / 180);
+  const ae = Math.sin(((alpha.alpha - epsylon) * Math.PI) / 180);
+
+  initialSixthForm.promienR1DlaLiniiPrzejsciowej = calculater1r2(
+    1,
+    ad,
+    ed,
+    ae,
+    r,
+    sk
+  ).toString();
+
+  initialSixthForm.promienR2DlaLiniiPrzejsciowej = calculater1r2(
+    2,
+    ad,
+    ed,
+    ae,
+    r,
+    sk
+  ).toString();
+
+  return initialSixthForm;
+};
+
+export const calculateEighthFormSchema = (): CamEighthFormSchemaValue => {
+  const initialEighthForm = JSON.parse(
+    JSON.stringify(initialState.eightForm)
+  ) as CamEighthFormSchemaValue;
+
+  return initialEighthForm;
 };

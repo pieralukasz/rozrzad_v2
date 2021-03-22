@@ -1,8 +1,10 @@
 import {
+  CamEighthFormSchemaValue,
   CamFifthFormSchemaValue,
   CamFirstFormSchemaValue,
   CamFourthFormSchemaValue,
   CamSecondFormSchemaValue,
+  CamSeventhFormSchemaValue,
   CamSixthFormSchemaValue,
   CamThirdFormSchemaValue,
 } from '../../validator/cam/types';
@@ -14,6 +16,8 @@ export interface CamPropsState {
   fourthForm: CamFourthFormSchemaValue;
   fifthForm: CamFifthFormSchemaValue;
   sixForm: CamSixthFormSchemaValue;
+  sevenForm: CamSeventhFormSchemaValue;
+  eightForm: CamEighthFormSchemaValue;
 }
 
 export const initialState: CamPropsState = {
@@ -50,11 +54,19 @@ export const initialState: CamPropsState = {
   fifthForm: {
     luzZaworu: '',
     luzKonstrukcyjnyKrzywki: '',
-    katDlaLiniiPrzejściowejDelta: '',
+    katDlaLiniiPrzejsciowejDelta: '',
   },
   sixForm: {
-    katDlaLiniiPrzejściowejEpsylon: '',
+    katDlaLiniiPrzejsciowejEpsylon: '',
     promienR1DlaLiniiPrzejsciowej: '',
     promienR2DlaLiniiPrzejsciowej: '',
+  },
+  sevenForm: {
+    srednicaTalerzykaPopychacza: '',
+    przesuniecieOsiPopychacza: '',
+    szerokoscKrzywki: '',
+  },
+  eightForm: {
+    minimalnaSrednicaPopychacza: '',
   },
 };

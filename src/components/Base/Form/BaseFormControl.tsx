@@ -98,7 +98,6 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
         autoFocus={autoFocus !== undefined ? autoFocus : count === 0}
         inputRef={reference}
         inputProps={{
-          min: min !== undefined ? min : 0,
           max: max !== undefined ? max : Infinity,
           step: step !== undefined ? step : 1,
         }}

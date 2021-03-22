@@ -35,13 +35,23 @@ export type CamFourthFormSchemaValue = {
 export type CamFifthFormSchemaValue = {
   luzZaworu: string;
   luzKonstrukcyjnyKrzywki: string;
-  katDlaLiniiPrzejściowejDelta: string;
+  katDlaLiniiPrzejsciowejDelta: string;
 };
 
 export type CamSixthFormSchemaValue = {
-  katDlaLiniiPrzejściowejEpsylon: string;
+  katDlaLiniiPrzejsciowejEpsylon: string;
   promienR1DlaLiniiPrzejsciowej: string;
   promienR2DlaLiniiPrzejsciowej: string;
+};
+
+export type CamSeventhFormSchemaValue = {
+  srednicaTalerzykaPopychacza: string;
+  przesuniecieOsiPopychacza: string;
+  szerokoscKrzywki: string;
+};
+
+export type CamEighthFormSchemaValue = {
+  minimalnaSrednicaPopychacza: string;
 };
 
 export type CamFormSchemaValue = CamFirstFormSchemaValue &
@@ -49,7 +59,9 @@ export type CamFormSchemaValue = CamFirstFormSchemaValue &
   CamThirdFormSchemaValue &
   CamFourthFormSchemaValue &
   CamFifthFormSchemaValue &
-  CamSixthFormSchemaValue;
+  CamSixthFormSchemaValue &
+  CamSeventhFormSchemaValue &
+  CamEighthFormSchemaValue;
 
 export type CamFormSchemaType =
   | CamFirstFormSchemaValue
@@ -58,4 +70,6 @@ export type CamFormSchemaType =
   | CamFourthFormSchemaValue
   | CamFifthFormSchemaValue
   | CamSixthFormSchemaValue
+  | CamSeventhFormSchemaValue
+  | CamEighthFormSchemaValue
   | CamFormSchemaValue;

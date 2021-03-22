@@ -125,7 +125,7 @@ export const camThirdFormSchemaIntake: BaseFormControlType[] = [
 
 export const camFourthFormSchemaIntake: BaseFormControlType[] = [
   {
-    inputLabel: 'Największe przyspieszenie dodatnie',
+    inputLabel: 'Największe przyspieszenie dodatnie E',
     formHelperText: 'amax [m/s^2]',
     name: 'najwiekszePrzyspieszenieDodatnie',
     required: true,
@@ -137,7 +137,7 @@ export const camFourthFormSchemaIntake: BaseFormControlType[] = [
     required: true,
   },
   {
-    inputLabel: 'Przyspieszenie na wierzchołku krzywki',
+    inputLabel: 'Przyspieszenie na wierzchołku krzywki W',
     formHelperText: 'amin [m/s^2]',
     name: 'przyspieszenieNaWierzcholkuKrzywki',
     required: true,
@@ -172,7 +172,7 @@ export const camFifthFormSchemaIntake: BaseFormControlType[] = [
   {
     inputLabel: 'Kąt dla linii przejściowej',
     formHelperText: 'delta [deg]',
-    name: 'katDlaLiniiPrzejściowejDelta',
+    name: 'katDlaLiniiPrzejsciowejDelta',
     required: true,
   },
 ];
@@ -181,7 +181,7 @@ export const camSixthFormSchemaIntake: BaseFormControlType[] = [
   {
     inputLabel: 'Kąt dla linii przejściowej',
     formHelperText: 'epsylon [deg]',
-    name: 'katDlaLiniiPrzejściowejEpsylon',
+    name: 'katDlaLiniiPrzejsciowejEpsylon',
     required: true,
   },
   {
@@ -194,6 +194,36 @@ export const camSixthFormSchemaIntake: BaseFormControlType[] = [
     inputLabel: 'Promień r2 dla linii przejściowej',
     formHelperText: 'r2 [mm]',
     name: 'promienR2DlaLiniiPrzejsciowej',
+    required: true,
+  },
+];
+
+export const camSeventhFormSchemaIntake: BaseFormControlType[] = [
+  {
+    inputLabel: 'Średnica talerzyka popychacza',
+    formHelperText: 'dt [mm]',
+    name: 'srednicaTalerzykaPopychacza',
+    required: true,
+  },
+  {
+    inputLabel: 'Przesunięcie osi popychacza',
+    formHelperText: 'e [mm]',
+    name: 'przesuniecieOsiPopychacza',
+    required: true,
+  },
+  {
+    inputLabel: 'Szerokość krzywki',
+    formHelperText: 'a [mm]',
+    name: 'szerokoscKrzywki',
+    required: true,
+  },
+];
+
+export const camEighthFormSchemaIntake: BaseFormControlType[] = [
+  {
+    inputLabel: 'Minimalna średnica popychacza',
+    formHelperText: 'dtmin [mm]',
+    name: 'minimalnaSrednicaPopychacza',
     required: true,
   },
 ];
