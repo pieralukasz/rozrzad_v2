@@ -53,6 +53,7 @@ import {
   CamThirdFormSchemaValue,
 } from '../../../validator/cam/types';
 import {
+  calculateAlpha,
   calculateEighthFormSchema,
   calculateFourthFormSchema,
   calculateSecondFormSchema,
@@ -137,7 +138,11 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
       case 6:
         dispatch(setSeventhForm(intakeValues as CamSeventhFormSchemaValue));
 
-        const eighthSchema = calculateEighthFormSchema();
+        const eighthSchema = calculateEighthFormSchema(
+          camForm.firstForm,
+          camForm.secondForm,
+          intakeValues as CamSeventhFormSchemaValue
+        );
         dispatch(setEighthForm(eighthSchema));
         break;
       default:
@@ -151,7 +156,6 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
   };
 
   const getStepContent = (stepIndex: number) => {
-    console.log(stepIndex);
     let returnSchema = [];
     switch (stepIndex) {
       case 0:
@@ -449,9 +453,52 @@ const CamContainer: React.FC<CamContainerProps> = ({ children, whichOne }) => {
                 Math.round(valueMax * 10) / 10
               }`
             : 'Wprowadź wartośc luzu zaworu';
-      } else if (newSchema[i].name === 'srednicaPopychacza') {
+      } else if (newSchema[i].name === 'srednicaTalerzykaPopychacza') {
         const r = parseFloat(camForm.firstForm.promienPodstawowyKrzywki);
         const R = parseFloat(camForm.secondForm.promienLukuBocznego);
+        const beta = parseFloat(camForm.secondForm.wartoscKataDBF);
+        const alpha = calculateAlpha(
+          camForm.firstForm.promienPodstawowyKrzywki,
+          camForm.firstForm.promienLukuWierzcholkowego,
+          camForm.secondForm.polozenieSrodkaLukuWierzcholkowego,
+          camForm.firstForm.katOtwarciaZaworuPrzedDMP,
+          camForm.firstForm.katZamknieciaZaworuPoDMP
+        );
+
+        const n = (R - r) * Math.sin(((beta - alpha.alpha) * Math.PI) / 180);
+
+        const valueMin = 2.2 * n;
+        const valueMax = 2.6 * n;
+
+        newSchema[i].additionalHelperItem = `Wartość zalecana: ${
+          Math.round(valueMin * 10) / 10
+        } <= sz <= ${Math.round(valueMax * 10) / 10}`;
+      } else if (newSchema[i].name === 'przesuniecieOsiPopychacza') {
+        const dt = (stateValue as CamSeventhFormSchemaValue)
+          .srednicaTalerzykaPopychacza;
+
+        const valueMin = 0.04 * parseFloat(dt);
+        const valueMax = 0.08 * parseFloat(dt);
+
+        newSchema[i].additionalHelperItem =
+          dt.length > 0
+            ? `Wartość zalecana: ${Math.round(valueMin * 10) / 10} <= sz <= ${
+                Math.round(valueMax * 10) / 10
+              }`
+            : 'Wprowadź wartośc średnicy talerzyka popychacza';
+      } else if (newSchema[i].name === 'szerokoscKrzywki') {
+        const dt = (stateValue as CamSeventhFormSchemaValue)
+          .srednicaTalerzykaPopychacza;
+
+        const valueMin = 0.4 * parseFloat(dt);
+        const valueMax = 0.7 * parseFloat(dt);
+
+        newSchema[i].additionalHelperItem =
+          dt.length > 0
+            ? `Wartość zalecana: ${Math.round(valueMin * 10) / 10} <= sz <= ${
+                Math.round(valueMax * 10) / 10
+              }`
+            : 'Wprowadź wartośc średnicy talerzyka popychacza';
       }
     }
 

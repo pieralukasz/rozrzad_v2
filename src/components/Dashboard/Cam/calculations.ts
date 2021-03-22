@@ -4,6 +4,7 @@ import {
   CamFirstFormSchemaValue,
   CamFourthFormSchemaValue,
   CamSecondFormSchemaValue,
+  CamSeventhFormSchemaValue,
   CamSixthFormSchemaValue,
   CamThirdFormSchemaValue,
 } from '../../../validator/cam/types';
@@ -128,6 +129,17 @@ export const calculater1r2 = (
     default:
       return 0;
   }
+};
+
+export const calculateMinimalnaSrednicaPopychacza = (
+  n: number,
+  e: number,
+  a: number
+): number => {
+  return (
+    Math.round(2 * Math.sqrt(Math.pow(a / 2 + e, 2) + Math.pow(n, 2)) * 100) /
+    100
+  );
 };
 
 export const calculateSecondFormSchema = (
@@ -310,10 +322,37 @@ export const calculateSixthFormSchema = (
   return initialSixthForm;
 };
 
-export const calculateEighthFormSchema = (): CamEighthFormSchemaValue => {
+export const calculateEighthFormSchema = (
+  firstForm: CamFirstFormSchemaValue,
+  secondForm: CamSecondFormSchemaValue,
+  seventhForm: CamSeventhFormSchemaValue
+): CamEighthFormSchemaValue => {
   const initialEighthForm = JSON.parse(
     JSON.stringify(initialState.eightForm)
   ) as CamEighthFormSchemaValue;
+
+  const r = parseFloat(firstForm.promienPodstawowyKrzywki);
+  const R = parseFloat(secondForm.promienLukuBocznego);
+  const beta = parseFloat(secondForm.wartoscKataDBF);
+  const alpha = calculateAlpha(
+    firstForm.promienPodstawowyKrzywki,
+    firstForm.promienLukuWierzcholkowego,
+    secondForm.polozenieSrodkaLukuWierzcholkowego,
+    firstForm.katOtwarciaZaworuPrzedDMP,
+    firstForm.katZamknieciaZaworuPoDMP
+  );
+
+  const dt = parseFloat(seventhForm.srednicaTalerzykaPopychacza);
+  const e = parseFloat(seventhForm.przesuniecieOsiPopychacza);
+  const a = parseFloat(seventhForm.szerokoscKrzywki);
+
+  const n = (R - r) * Math.sin(((beta - alpha.alpha) * Math.PI) / 180);
+
+  initialEighthForm.minimalnaSrednicaPopychacza = calculateMinimalnaSrednicaPopychacza(
+    n,
+    e,
+    a
+  ).toString();
 
   return initialEighthForm;
 };

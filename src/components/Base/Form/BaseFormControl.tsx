@@ -14,10 +14,12 @@ import { setSecondForm } from '../../../slices/valveForm/valveFormSlice';
 import {
   setFirstForm,
   setFifthForm,
+  setSeventhForm,
 } from '../../../slices/camForm/camFormSlice';
 import {
   CamFifthFormSchemaValue,
   CamFirstFormSchemaValue,
+  CamSeventhFormSchemaValue,
 } from '../../../validator/cam/types';
 import { useLocation } from 'react-router-dom';
 
@@ -73,8 +75,16 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
         // @ts-ignore
         camFifthForm[name] = value;
 
+        const camSeventhForm = JSON.parse(
+          JSON.stringify(camForm.sevenForm)
+        ) as CamSeventhFormSchemaValue;
+
+        // @ts-ignore
+        camSeventhForm[name] = value;
+
         dispatch(setFirstForm(camFirstForm));
         dispatch(setFifthForm(camFifthForm));
+        dispatch(setSeventhForm(camSeventhForm));
         break;
       default:
         break;
