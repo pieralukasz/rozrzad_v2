@@ -22,10 +22,28 @@ export type SpringSecondFormSchemaValue = {
   stosunekSilSprezynyDoSilBezwlandWPktW: string;
 };
 
+export type SpringThirdFormSchemaValue = {
+  predkoscObrotowaSilnika: string;
+  liczbaSuwowSilnika: string;
+  procentObciazeniaObliczanejSprezyny: string;
+  srednicaZewnetrznaSprezynyZWarKonstr: string;
+  materialSprezyny: string;
+};
+
+export type SpringFourthFormSchemaValue = {
+  silaWObliczanejSprezynieS1: string;
+  silaWObliczanejSprezynieS2: string;
+  stalaDrugiejSprezyny: string;
+};
+
 export type SpringFormSchemaValue = SpringFirstFormSchemaValue &
-  SpringSecondFormSchemaValue;
+  SpringSecondFormSchemaValue &
+  SpringThirdFormSchemaValue &
+  SpringFourthFormSchemaValue;
 
 export type SpringFormSchemaType =
   | SpringFirstFormSchemaValue
   | SpringSecondFormSchemaValue
+  | SpringThirdFormSchemaValue
+  | SpringFourthFormSchemaValue
   | SpringFormSchemaValue;

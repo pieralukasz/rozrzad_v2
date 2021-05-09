@@ -15,10 +15,13 @@ const Dashboard: React.FC = () => {
       <ActionPanelCard to="/spring" color="#c8c6a7" name="Sprężyna">
         Sprężyna
       </ActionPanelCard>
-      <ActionPanelCard to="/new" color="#435560" name="Dodatkowy Program">
-        Dodatkowy program
+      <ActionPanelCard
+        to="/spring-parameters"
+        color="#435560"
+        name="Parametry Sprężyn"
+      >
+        Parametry Sprężyn
       </ActionPanelCard>
-      {/*  #435560 */}
     </DashboardView>
   );
 };

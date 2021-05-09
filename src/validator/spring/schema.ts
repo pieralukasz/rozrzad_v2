@@ -113,3 +113,64 @@ export const springSecondFormSchema: BaseFormControlType[] = [
     required: true,
   },
 ];
+
+export const springThirdFormSchema: BaseFormControlType[] = [
+  {
+    inputLabel: 'Predkość obrotowa silnika',
+    formHelperText: 'n [obr/min]',
+    name: 'predkoscObrotowaSilnika',
+    required: true,
+  },
+  {
+    inputLabel: 'Liczba suwów silnika',
+    formHelperText: 'tau [-]',
+    name: 'liczbaSuwowSilnika',
+    required: true,
+  },
+  {
+    inputLabel: 'Procent obciążenia obliczanej sprężyny',
+    formHelperText: '[%]',
+    name: 'procentObciazeniaObliczanejSprezyny',
+    required: true,
+  },
+  {
+    inputLabel: 'Średnica zewnętrzna spręzyny z war. konstr.',
+    formHelperText: 'Dz [mm]',
+    name: 'srednicaZewnetrznaSprezynyZWarKonstr',
+    required: true,
+  },
+  {
+    inputLabel: 'Materiał sprężyny',
+    formHelperText: '[-]',
+    name: 'materialSprezyny',
+    required: true,
+    min: 1,
+    max: 4,
+    additionalHelperItem:
+      '1. drut stalowy, walcowany o podwyższonej wytrzymałości \n ' +
+      '2. drut stalowy, przeciągany o podwyższonej wytrzymałości \n' +
+      '3. drut stalowy, walcowany o wysokiej wytrzymałości \n' +
+      '4. drut stalowy, przeciągany o wysokiej wytrzymałości',
+  },
+];
+
+export const springFourthFormSchema: BaseFormControlType[] = [
+  {
+    inputLabel: 'Siła w obliczanej sprężynie',
+    formHelperText: 'S1 [N]',
+    name: 'silaWObliczanejSprezynieS1',
+    required: true,
+  },
+  {
+    inputLabel: 'Siła w obliczanej sprężynie',
+    formHelperText: 'S2 [N]',
+    name: 'silaWObliczanejSprezynieS2',
+    required: true,
+  },
+  {
+    inputLabel: 'Stała obliczanej sprężyny',
+    formHelperText: 'C [N/mm]',
+    name: 'stalaDrugiejSprezyny',
+    required: true,
+  },
+];

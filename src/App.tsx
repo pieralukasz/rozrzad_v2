@@ -55,6 +55,6 @@ const AppView = styled.div`
 const BackButton = styled(Button)`
   position: fixed !important;
   transform: translate(-2rem, -1rem);
-  right: 0 !important;
-  bottom: 0 !important;
+  right: 2% !important;
+  bottom: 2% !important;
 `;

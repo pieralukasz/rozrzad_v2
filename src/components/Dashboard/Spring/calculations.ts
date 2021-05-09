@@ -1,6 +1,8 @@
 import {
   SpringFirstFormSchemaValue,
+  SpringFourthFormSchemaValue,
   SpringSecondFormSchemaValue,
+  SpringThirdFormSchemaValue,
 } from '../../../validator/spring/types';
 import { initialState } from '../../../slices/springForm/initialState';
 
@@ -78,7 +80,6 @@ export const calculateSecondFormSchema = (
   } = firstFormSchema;
 
   const initalSecondForm = JSON.parse(JSON.stringify(initialState.secondForm));
-
   initalSecondForm.napiecieSprezynyPrzyZamknietymZaworze = calculateS1(
     wspolczynnikDociskuZaworu,
     srednicaZewnetrznaStozkaZaworu as string
@@ -126,4 +127,32 @@ export const calculateSecondFormSchema = (
   );
 
   return initalSecondForm as SpringSecondFormSchemaValue;
+};
+
+export const calculateFourthFormSchema = (
+  firstFormSchema: SpringFirstFormSchemaValue,
+  secondFormSchema: SpringSecondFormSchemaValue,
+  thirdFormSchema: SpringThirdFormSchemaValue
+): SpringFourthFormSchemaValue => {
+  const initialFourthForm = JSON.parse(JSON.stringify(initialState.fourthForm));
+
+  const {
+    napiecieSprezynyPrzyOtwartymZaworze,
+    napiecieSprezynyPrzyZamknietymZaworze,
+    stalaSprezyny,
+  } = secondFormSchema;
+
+  const { procentObciazeniaObliczanejSprezyny } = thirdFormSchema;
+
+  const pr = Number(procentObciazeniaObliczanejSprezyny) / 100;
+
+  initialFourthForm.silaWObliczanejSprezynieS1 =
+    Math.round(Number(napiecieSprezynyPrzyZamknietymZaworze) * pr * 1000) /
+    1000;
+  initialFourthForm.silaWObliczanejSprezynieS2 =
+    Math.round(Number(napiecieSprezynyPrzyOtwartymZaworze) * pr * 1000) / 1000;
+  initialFourthForm.stalaDrugiejSprezyny =
+    Math.round(Number(stalaSprezyny) * pr * 1000) / 1000;
+
+  return <SpringFourthFormSchemaValue>initialFourthForm;
 };

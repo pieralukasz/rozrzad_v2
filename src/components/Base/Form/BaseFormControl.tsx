@@ -118,11 +118,9 @@ const BaseFormControl: React.FC<BaseFormControlProps> = ({
       />
       <FormHelperText>{formHelperText}</FormHelperText>
       {additionalHelperItem !== undefined ? (
-        <>
-          <AdditionalFormHelperText>
-            {additionalHelperItem}
-          </AdditionalFormHelperText>
-        </>
+        <AdditionalFormHelperText>
+          {additionalHelperItem}
+        </AdditionalFormHelperText>
       ) : (
         ''
       )}

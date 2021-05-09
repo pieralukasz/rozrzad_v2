@@ -10,6 +10,7 @@ import CamOutlet from '../views/Cam/CamOutlet';
 import CamIntake from '../views/Cam/CamIntake';
 import SpringOutlet from '../views/Spring/SpringOutlet';
 import SpringIntake from '../views/Spring/SpringIntake';
+import SpringParameters from '../components/Dashboard/SpringParameters/SpringParameters';
 
 export interface Config extends RouteConfig {
   component:
@@ -89,6 +90,12 @@ const ROUTES: Config[] = [
         component: SpringIntake,
       },
     ],
+  },
+  {
+    path: '/spring-parameters',
+    ket: 'SPRING-PARAMETERS',
+    exact: false,
+    component: SpringParameters,
   },
 ];
 

@@ -7,6 +7,8 @@ import { BaseFormControlType } from '../../../validator/types';
 import {
   springFirstFormSchema,
   springSecondFormSchema,
+  springThirdFormSchema,
+  springFourthFormSchema,
 } from '../../../validator/spring/schema';
 import styled from 'styled-components';
 import BaseStepperTop from '../../Base/BaseStepperTop';
@@ -14,14 +16,21 @@ import { Button } from '@material-ui/core';
 import {
   setFirstForm,
   setSecondForm,
+  setThirdForm,
+  setFourthForm,
 } from '../../../slices/springForm/springFormSlice';
 import {
-  SpringFirstFormSchemaValue,
   SpringFormSchemaType,
+  SpringFirstFormSchemaValue,
+  SpringThirdFormSchemaValue,
 } from '../../../validator/spring/types';
 
-import { calculateSecondFormSchema } from './calculations';
+import {
+  calculateFourthFormSchema,
+  calculateSecondFormSchema,
+} from './calculations';
 import ValveResults from '../Valve/ValveResults';
+import { saveJSONFileIntoFolder } from '../../../utils/downloadFile';
 
 type SpringContainerProps = {
   whichOne: string;
@@ -34,7 +43,9 @@ const SpringContainer: React.FC<SpringContainerProps> = ({
   const steps = [
     'Obliczenia wstępne sprężyny',
     'Obliczenia wstępne sprężyny - Obliczenia',
-    'Podsumowanie wyników',
+    'Obliczenia drugiej sprężyny',
+    'Obliczenia drugiej sprężyny - Obliczenia',
+    'Wyniki',
   ];
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -60,12 +71,21 @@ const SpringContainer: React.FC<SpringContainerProps> = ({
         const secondSchema = calculateSecondFormSchema(
           intakeValues as SpringFirstFormSchemaValue
         );
-
+        console.log(intakeValues);
         dispatch(setFirstForm(intakeValues as SpringFirstFormSchemaValue));
         dispatch(setSecondForm(secondSchema));
-
         break;
-      case 1:
+      case 2:
+        const fourthSchema = calculateFourthFormSchema(
+          springForm.firstForm,
+          springForm.secondForm,
+          intakeValues as SpringThirdFormSchemaValue
+        );
+        dispatch(setThirdForm(intakeValues as SpringThirdFormSchemaValue));
+        dispatch(setFourthForm(fourthSchema));
+        break;
+      case 4:
+        history.push('/');
         break;
       default:
         console.log('nothing');
@@ -84,8 +104,20 @@ const SpringContainer: React.FC<SpringContainerProps> = ({
       case 1:
         const firstSchema = checkIfStateExist(0, springFirstFormSchema);
         const secondSchema = checkIfStateExist(1, springSecondFormSchema);
-
         return <ValveResults results={[...firstSchema, ...secondSchema]} />;
+      case 2:
+        returnSchema = checkIfStateExist(stepIndex, springThirdFormSchema);
+        return <BaseForm formSchema={returnSchema} register={register} />;
+      case 3:
+        const thirdSchema = checkIfStateExist(2, springThirdFormSchema);
+        const fourthSchema = checkIfStateExist(3, springFourthFormSchema);
+        return <ValveResults results={[...thirdSchema, ...fourthSchema]} />;
+      case 4:
+        const first = checkIfStateExist(0, springFirstFormSchema);
+        const two = checkIfStateExist(1, springSecondFormSchema);
+        const three = checkIfStateExist(2, springThirdFormSchema);
+        const four = checkIfStateExist(3, springFourthFormSchema);
+        return <ValveResults results={[...first, ...two, ...three, ...four]} />;
       default:
         return <div>Unknown</div>;
     }
@@ -100,6 +132,10 @@ const SpringContainer: React.FC<SpringContainerProps> = ({
         return setNewValue(defaultSchema, springForm.firstForm);
       case 1:
         return setNewValue(defaultSchema, springForm.secondForm);
+      case 2:
+        return setNewValue(defaultSchema, springForm.thirdForm);
+      case 3:
+        return setNewValue(defaultSchema, springForm.fourthForm);
       default:
         return defaultSchema;
     }
@@ -118,6 +154,21 @@ const SpringContainer: React.FC<SpringContainerProps> = ({
     }
     return defaultSchema;
   };
+  const saveFile = () => {
+    let form = {
+      ...springForm.firstForm,
+      ...springForm.secondForm,
+      ...springForm.thirdForm,
+      ...springForm.fourthForm,
+    };
+
+    Object.keys(form).forEach(function (el) {
+      // @ts-ignore
+      form[el] = parseFloat(form[el]);
+    });
+
+    saveJSONFileIntoFolder('Sprezyna', form);
+  };
 
   return (
     <SpringIntakeView>
@@ -131,18 +182,18 @@ const SpringContainer: React.FC<SpringContainerProps> = ({
         ) : (
           ''
         )}
-        {/*{activeStep === 2 ? (*/}
-        {/*  <Button variant="outlined" onClick={() => saveFile()}>*/}
-        {/*    Pobierz dane*/}
-        {/*  </Button>*/}
-        {/*) : (*/}
-        {/*  ''*/}
-        {/*)}*/}
+        {activeStep === 4 ? (
+          <Button variant="outlined" onClick={() => saveFile()}>
+            Pobierz dane
+          </Button>
+        ) : (
+          ''
+        )}
         <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-          {activeStep <= 1 ? 'Potwierdź' : 'Zakończ'}
+          {activeStep <= 4 ? 'Potwierdź' : 'Zakończ'}
         </Button>
       </ButtonContainer>
-      <FormView onSubmit={handleSubmit(onSubmit)}>
+      <FormView onSubmit={handleSubmit(onSubmit)} key={activeStep}>
         {getStepContent(activeStep)}
       </FormView>
     </SpringIntakeView>
