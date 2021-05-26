@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAppSelector } from '../../../store/hooks';
 import styled from 'styled-components';
 import springParameters from '../../../utils/springParameters';
-import { calculateS1 } from '../Spring/calculations';
 
 const Rm = 1570;
 
@@ -47,8 +46,44 @@ const SpringParametersResults: React.FC = () => {
     return Math.round((d / D) * 1000) / 1000;
   }, []);
 
-  const calculatenm2 = useCallback((tau2: number) => {
-    return (0.58 * Rm) / tau2;
+  const calculatenm = useCallback((tau: number) => {
+    return (0.58 * Rm) / tau;
+  }, []);
+
+  const calculateC = useCallback((s1: number, s2: number, Hzd: number) => {
+    return Math.round(((s2 - s1) / Hzd) * 10) / 10;
+  }, []);
+
+  const calculateIcz = useCallback((d: number, c: number, D: number) => {
+    const icz = (81500 * Math.pow(d, 4)) / (8 * c * Math.pow(D, 3));
+    const r = icz % 0.5;
+
+    if (r < 0.5) {
+      return icz - r;
+    } else {
+      return icz + r;
+    }
+  }, []);
+
+  const calculateL1 = useCallback((d: number, icz: number, Hzd: number) => {
+    return (
+      Math.ceil(((icz + 1.5) * d + (icz + 0.5) * (d * 0.3) + Hzd) * 10) / 10
+    );
+  }, []);
+
+  const calculateL0 = useCallback((L1: number, S1: number, c: number) => {
+    return L1 + S1 / c;
+  }, []);
+
+  const calculateS3orT3 = useCallback(
+    (S2orT2: number, Lo: number, L2: number, L3: number) => {
+      return (S2orT2 * (Lo - L3)) / (Lo - L2);
+    },
+    []
+  );
+
+  const calculateLd = useCallback((D: number, icz: number) => {
+    return Math.PI * D * (icz + 2.5);
   }, []);
 
   const prepareAllParameters = () => {
@@ -59,6 +94,8 @@ const SpringParametersResults: React.FC = () => {
       masyZastepczeZredukowaneNaOsZaworu,
       przelozenieDzwigniZaworowej,
       promienLukuWierzcholkowego,
+      stosunekSilWSprezynie,
+      skokZaworu,
     } = springForm.firstForm;
 
     const dD = 3.5 / 37;
@@ -70,8 +107,6 @@ const SpringParametersResults: React.FC = () => {
           +przelozenieDzwigniZaworowej *
           1000
       ) / 1000;
-
-    console.log(Pm * 1.5);
 
     let Dd = calculateDd(
       +springForm.thirdForm.srednicaZewnetrznaSprezynyZWarKonstr,
@@ -96,8 +131,6 @@ const SpringParametersResults: React.FC = () => {
       const nr =
         +springForm.thirdForm.liczbaSuwowSilnika === 4 ? omega / 2 : omega;
 
-      console.log(nr);
-
       // stałe wartości`
       obj.srednicaDrutu = String(Number(promienLukuWierzcholkowego).toFixed(3));
       obj.srednicaPodzialowa = srednicaPodzialowa.toFixed(3);
@@ -110,13 +143,61 @@ const SpringParametersResults: React.FC = () => {
         +promienLukuWierzcholkowego
       ).toFixed(3);
 
-      obj.wspolczynniknm2 = calculatenm2(
-        calculateTau2(
-          getGohner(+obj.dD),
-          srednicaPodzialowa,
-          +springForm.secondForm.napiecieSprezynyPrzyOtwartymZaworze,
-          +promienLukuWierzcholkowego
-        )
+      obj.silaS1 = (
+        +springForm.secondForm.napiecieSprezynyPrzyOtwartymZaworze /
+        (+stosunekSilWSprezynie + (Math.random() * 3) / 10)
+      ).toFixed(3);
+
+      const tau2 = calculateTau2(
+        getGohner(+obj.dD),
+        srednicaPodzialowa,
+        +springForm.secondForm.napiecieSprezynyPrzyOtwartymZaworze,
+        +promienLukuWierzcholkowego
+      );
+
+      obj.wspolczynniknm2 = calculatenm(tau2).toFixed(3);
+
+      obj.stalaSprezyny = calculateC(+obj.silaS1, +obj.silaS2, +skokZaworu);
+
+      obj.liczbaZwojowCzynnych = calculateIcz(
+        +obj.srednicaDrutu,
+        +obj.stalaSprezyny,
+        +obj.srednicaPodzialowa
+      );
+
+      obj.dlugoscL1 = calculateL1(
+        +obj.liczbaZwojowCzynnych,
+        +obj.srednicaDrutu,
+        +skokZaworu
+      );
+
+      obj.dlugoscLo = calculateL0(
+        +obj.dlugoscL1,
+        +obj.silaS1,
+        +obj.stalaSprezyny
+      ).toFixed(2);
+
+      obj.dlugoscL2 = (+obj.dlugoscL1 - +skokZaworu).toFixed(2);
+
+      obj.dlugoscL3 = (
+        (+obj.liczbaZwojowCzynnych + 1.5) *
+        +obj.srednicaDrutu
+      ).toFixed(2);
+
+      obj.silaS3 = calculateS3orT3(
+        +obj.silaS2,
+        +obj.dlugoscLo,
+        +obj.dlugoscL2,
+        +obj.dlugoscL3
+      ).toFixed(3);
+
+      obj.wspolczynniknm3 = calculatenm(
+        calculateS3orT3(tau2, +obj.dlugoscLo, +obj.dlugoscL2, +obj.dlugoscL3)
+      ).toFixed(3);
+
+      obj.dlugoscLd = calculateLd(
+        +obj.srednicaPodzialowa,
+        +obj.liczbaZwojowCzynnych
       ).toFixed(3);
 
       ar.push(obj);

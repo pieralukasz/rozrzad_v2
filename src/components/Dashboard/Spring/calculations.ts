@@ -6,13 +6,13 @@ import {
 } from '../../../validator/spring/types';
 import { initialState } from '../../../slices/springForm/initialState';
 
-export const calculateS1 = (dps: string, dzs: string) => {
-  const dp = Number(dps);
-  const dz = Number(dzs);
+export const calculateS1 = (s2s1: string, s2: string) => {
+  console.log(Number(s2) / Number(s2s1));
+  return Math.round((Number(s2) / Number(s2s1)) * 1000) / 1000;
 
-  return (
-    Math.round((((Math.PI / 4) * Math.pow(dz, 2) * dp) / 1000) * 1000) / 1000
-  );
+  // return (
+  //   Math.round((((Math.PI / 4) * Math.pow(dz, 2) * dp) / 1000) * 1000) / 1000
+  // );
 };
 
 export const calculateS2 = (
@@ -77,13 +77,10 @@ export const calculateSecondFormSchema = (
     stosunekSilSprezynyDoSilBezwladnosci,
     wspolczynnikDociskuZaworu,
     przyspieszenieWPunkcieGranicznymF,
+    stosunekSilWSprezynie,
   } = firstFormSchema;
 
   const initalSecondForm = JSON.parse(JSON.stringify(initialState.secondForm));
-  initalSecondForm.napiecieSprezynyPrzyZamknietymZaworze = calculateS1(
-    wspolczynnikDociskuZaworu,
-    srednicaZewnetrznaStozkaZaworu as string
-  );
 
   initalSecondForm.napiecieSprezynyPrzyOtwartymZaworze = calculateS2(
     Number(przyspieszenieNaWierzcholkuKrzywkiW),
@@ -92,12 +89,17 @@ export const calculateSecondFormSchema = (
     Number(stosunekSilSprezynyDoSilBezwladnosci)
   );
 
-  initalSecondForm.stosunekSilWSprezynie =
-    Math.round(
-      (Number(initalSecondForm.napiecieSprezynyPrzyOtwartymZaworze) /
-        Number(initalSecondForm.napiecieSprezynyPrzyZamknietymZaworze)) *
-        1000
-    ) / 1000;
+  initalSecondForm.napiecieSprezynyPrzyZamknietymZaworze = calculateS1(
+    stosunekSilWSprezynie,
+    initalSecondForm.napiecieSprezynyPrzyOtwartymZaworze
+  );
+
+  // initalSecondForm.stosunekSilWSprezynie =
+  //   Math.round(
+  //     (Number(initalSecondForm.napiecieSprezynyPrzyOtwartymZaworze) /
+  //       Number(initalSecondForm.napiecieSprezynyPrzyZamknietymZaworze)) *
+  //       1000
+  //   ) / 1000;
 
   initalSecondForm.stalaSprezyny = calculateC(
     Number(initalSecondForm.napiecieSprezynyPrzyZamknietymZaworze),

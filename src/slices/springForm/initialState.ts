@@ -26,11 +26,12 @@ export const initialState: springPropsState = {
     wspolczynnikDociskuZaworu: '',
     przelozenieDzwigniZaworowej: '',
     stosunekSilSprezynyDoSilBezwladnosci: '',
+    stosunekSilWSprezynie: '',
   },
   secondForm: {
     napiecieSprezynyPrzyZamknietymZaworze: '',
     napiecieSprezynyPrzyOtwartymZaworze: '',
-    stosunekSilWSprezynie: '',
+
     stalaSprezyny: '',
     stosunekSilSprezynyDoSilBezwlandWPktF: '',
     stosunekSilSprezynyDoSilBezwlandWPktW: '',

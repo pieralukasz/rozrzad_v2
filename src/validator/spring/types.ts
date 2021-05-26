@@ -11,12 +11,12 @@ export type SpringFirstFormSchemaValue = {
   wspolczynnikDociskuZaworu: string;
   przelozenieDzwigniZaworowej: string;
   stosunekSilSprezynyDoSilBezwladnosci: string;
+  stosunekSilWSprezynie: string;
 };
 
 export type SpringSecondFormSchemaValue = {
   napiecieSprezynyPrzyZamknietymZaworze: string;
   napiecieSprezynyPrzyOtwartymZaworze: string;
-  stosunekSilWSprezynie: string;
   stalaSprezyny: string;
   stosunekSilSprezynyDoSilBezwlandWPktF: string;
   stosunekSilSprezynyDoSilBezwlandWPktW: string;

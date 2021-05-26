@@ -73,6 +73,12 @@ export const springFirstFormSchema: BaseFormControlType[] = [
     name: 'stosunekSilSprezynyDoSilBezwladnosci',
     required: true,
   },
+  {
+    inputLabel: 'Stosunek sił sprężyny S1 do S2',
+    formHelperText: 'S2/S1 [-]',
+    name: 'stosunekSilWSprezynie',
+    required: true,
+  },
 ];
 
 export const springSecondFormSchema: BaseFormControlType[] = [
@@ -86,12 +92,6 @@ export const springSecondFormSchema: BaseFormControlType[] = [
     inputLabel: 'Napięcie sprężyny przy otwartym zaworze',
     formHelperText: 'S2 [N]',
     name: 'napiecieSprezynyPrzyOtwartymZaworze',
-    required: true,
-  },
-  {
-    inputLabel: 'Stosunek sił w sprężynie',
-    formHelperText: 'S1/S2 [N]',
-    name: 'stosunekSilWSprezynie',
     required: true,
   },
   {

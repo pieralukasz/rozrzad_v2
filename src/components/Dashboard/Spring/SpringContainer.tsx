@@ -65,7 +65,6 @@ const SpringContainer: React.FC<SpringContainerProps> = ({
   const { handleSubmit, register } = useForm();
 
   const onSubmit = (intakeValues: SpringFormSchemaType) => {
-    console.log(activeStep);
     switch (activeStep) {
       case 0:
         const secondSchema = calculateSecondFormSchema(
